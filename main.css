@@ -9,11 +9,11 @@ body {
     /*background-image: url(https://drive.google.com/file/d/1TqtTb5VjLyrh0AG5WYDnXzJIJkKk5iwo/preview)*/
 }
 #canvas {
-    background-color: #0c0c0c;
+    background-color: #000000;
     /*background-color: transparent;*/
     /* border: 12px solid #333333; */
     cursor: crosshair;
-margin-left: 50px;
+    margin-top:20vh;
 }
 #timer{
     position: absolute;
