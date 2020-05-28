@@ -18,6 +18,7 @@ function Game() {
   //PLAYER
   this.player = new Player()
 
+  //START GAME
   setInterval(function () {
     //RESPONSIVE MAP
     if (SCREEN_WIDTH != window.innerWidth || SCREEN_HEIGHT != window.innerHeight) {
