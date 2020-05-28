@@ -13,7 +13,7 @@ function Player() {
   this.create = function () {
 
     //PLAYER MOVE(FIRST:CLEAR CANVAS)
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     // FOLLOW MOUSE WITH LAG
     this.shift.x += (mouseX - this.shift.x) * (this.speed);

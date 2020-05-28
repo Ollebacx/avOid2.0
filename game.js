@@ -1,4 +1,6 @@
 var CANVAS = document.getElementById('canvas');
+var context = this.canvas.getContext('2d')
+
 var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
 var mouseX = (window.innerWidth - SCREEN_WIDTH -10);
@@ -13,10 +15,14 @@ function Game() {
 
   // MAP
   this.map = new Map()
-  map.create()
+  this.map.create()
 
   //PLAYER
   this.player = new Player()
+
+  //ENEMIES
+  this.enemies = new Enemies()
+  // setInterval(this.enemies.create, 1000 / 60)
 
   //START GAME
   setInterval(function () {
@@ -27,8 +33,10 @@ function Game() {
       // console.log(SCREEN_WIDTH)
       map.resize()
     }
-    //PLAYER MOVES
-    player.create()
+    //ELEMENTS MOVES
+    context.clearRect(0, 0, CANVAS.width, this.CANVAS.height);
+    this.enemies.create()
+    this.player.create()
   }, 1000 / 60);
 
 }
