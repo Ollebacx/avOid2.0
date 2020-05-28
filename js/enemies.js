@@ -1,14 +1,12 @@
 
-function Enemies() {
+function Enemy(positions) {
   // console.log(mouseX)
   this.canvas = CANVAS;
   this.context = this.canvas.getContext('2d')
-  this.position = { x: 500, y: -10 };
-  this.size = 10;
-  this.speed = 3;
+  this.position = { x: positions.x, y: positions.y };
+  this.size = Math.random()*5+8;
+  this.speed = Math.random()*0.2+1;
   this.fillColor = 'red';
-  this.enemies = [];
-  this.maxEnemies = 60;
   this.create = function () {
 
     //ENEMIES MOVE(FIRST:CLEAR CANVAS)
@@ -18,10 +16,18 @@ function Enemies() {
     this.position.x -= this.speed;
     this.position.y += this.speed;
 
+    // RESET POSITION WHEN CANVAS END
+    if (this.position.x < -10) {
+      this.position.x = this.canvas.width + 10 + Math.random() * 30;
+    }
+    if (this.position.y > this.canvas.height + 10) {
+      this.position.y = -10 + Math.random() * -30;
+    }
+
     //ENEMIES BODY
     this.context.beginPath();
     this.context.fillStyle = this.fillColor;
-    console.log(this.position.x)
+    // console.log(this.position.x)
     this.context.arc(this.position.x, this.position.y, this.size / 2, 0, Math.PI * 2, true);
     this.context.fill();
   }
