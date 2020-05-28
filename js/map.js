@@ -1,5 +1,3 @@
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
 
 function Map() {
   this.create = function () {
