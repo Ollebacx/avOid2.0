@@ -12,24 +12,24 @@ function Player() {
   this.maxPositions = 60;
   this.create = function () {
 
-    //Player move(first: clear last position)
+    //PLAYER MOVE(FIRST:CLEAR CANVAS)
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // Follow mouse with some lag
+    // FOLLOW MOUSE WITH LAG
     this.shift.x += (mouseX - this.shift.x) * (this.speed);
     this.shift.y += (mouseY - this.shift.y) * (this.speed);
 
-    // Apply position
+    // APPLY POSITION
     this.position.x = this.shift.x;
     this.position.y = this.shift.y;
 
-    //Player Body
+    //PLAYER BODY
     this.context.beginPath();
     this.context.fillStyle = this.fillColor;
     this.context.arc(this.position.x, this.position.y, this.size / 2, 0, Math.PI * 2, true);
     this.context.fill();
 
-    //Player Trail
+    //PLAYER TRAIL
     let history = this.positions, prevPot, nextPot;
     this.context.beginPath();
     this.context.lineWidth = 2;

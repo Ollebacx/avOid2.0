@@ -1,11 +1,11 @@
 var CANVAS = document.getElementById('canvas');
 var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
-var mouseX = (window.innerWidth - SCREEN_WIDTH);
-var mouseY = (window.innerHeight - SCREEN_HEIGHT);
+var mouseX = (window.innerWidth - SCREEN_WIDTH -10);
+var mouseY = SCREEN_HEIGHT + 10;
 
 function Game() {
-  //Register event listener
+  //REGISTER EVENT LISTENER
   document.addEventListener('mousemove', function (event) {
     mouseX = event.clientX - (window.innerWidth - SCREEN_WIDTH) * .5;
     mouseY = event.clientY - (window.innerHeight - SCREEN_HEIGHT) * .5;
