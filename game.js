@@ -3,7 +3,7 @@ var context = this.canvas.getContext('2d')
 
 var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
-var mouseX = (window.innerWidth - SCREEN_WIDTH -10);
+var mouseX = (window.innerWidth - SCREEN_WIDTH - 10);
 var mouseY = SCREEN_HEIGHT + 10;
 
 var enemies = [];
@@ -27,17 +27,15 @@ function Game() {
   this.map.create()
 
   //PLAYER
-  this.player = new Player()
+  this.player = new Player();
+  this.player.distCollision = this.player.radius - 2;
 
   //ENEMIES QUANTITY
   for (let i = 0; i < enemiesQty; i++) {
-    const x = Math.random() * (SCREEN_WIDTH*2);
+    const x = Math.random() * (SCREEN_WIDTH * 2);
     const y = Math.random() * -SCREEN_HEIGHT;
     this.enemies.push(new Enemy({ x, y }));
   }
-
-  //COLLISIONS
-  this.collision = new Collision()
 
   //START GAME
   setInterval(function () {
@@ -51,10 +49,19 @@ function Game() {
     //ELEMENTS MOVES
     context.clearRect(0, 0, CANVAS.width, this.CANVAS.height);
     this.player.create()
-    for (var j = 0; j < this.enemies.length; j++){
+    for (var j = 0; j < this.enemies.length; j++) {
       this.enemies[j].create()
-      console.log(this.player.position);
+      //CHECK ENEMIES COLLISION
+      enemyCollision(j)
     }
-    this.collision.check();
   }, 10);
+}
+function enemyCollision(j) {
+  if (this.player && this.player.position.x - this.player.distCollision < this.enemies[j].position.x + this.enemies[j].radius &&
+    this.player.position.y - this.player.distCollision < this.enemies[j].position.y + this.enemies[j].radius &&
+    this.player.position.x + this.player.distCollision > this.enemies[j].position.x - this.enemies[j].radius &&
+    this.player.position.y + this.player.distCollision > this.enemies[j].position.y - this.enemies[j].radius) {
+    this.player.lifeCount--
+    this.enemies.splice(j, 1)
+  };
 }
