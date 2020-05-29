@@ -1,3 +1,5 @@
+var START;
+
 var CANVAS = document.getElementById('canvas');
 var context = this.canvas.getContext('2d')
 
@@ -40,7 +42,7 @@ function Game() {
   }
 
   //START GAME
-  setInterval(function () {
+  START = setInterval(function () {
     //RESPONSIVE MAP
     if (SCREEN_WIDTH != window.innerWidth || SCREEN_HEIGHT != window.innerHeight) {
       SCREEN_WIDTH = window.innerWidth;
@@ -51,13 +53,19 @@ function Game() {
     //ELEMENTS MOVES
     context.clearRect(0, 0, CANVAS.width, this.CANVAS.height);
     this.player.create()
-      for (var j = 0; j < this.enemies.length; j++) {
-        this.enemies[j].create()
-        //CHECK ENEMIES COLLISION
-        enemyCollision(j)
-      }
+    for (var j = 0; j < this.enemies.length; j++) {
+      this.enemies[j].create()
+      //CHECK ENEMIES COLLISION
+      enemyCollision(j)
+    }
+    //FINISH GAME
+    if (this.player.lifeCount === -1) {
+      endGame();
+      resetGame();
+    }
   }, 10);
 }
+
 function enemyCollision(j) {
   if (this.player && this.player.position.x - this.player.distCollision < this.enemies[j].position.x + this.enemies[j].radius &&
     this.player.position.y - this.player.distCollision < this.enemies[j].position.y + this.enemies[j].radius &&
@@ -74,4 +82,16 @@ function enemyCollision(j) {
     //FREEZE ENEMIES
     this.enemies[j].stopEnemiesMove();
   };
+}
+
+function endGame() {
+  clearInterval(START);
+  alert('¿QUÉ TE CREÍSTE JORÍO QUE ESTO ES JAUJA O QUÉ? PERDISTE MI NIÑO NO TE QUEDAN VIDAS PERDISTEEE')
+}
+
+function resetGame() {
+  PLAYING = 1;
+  enemies = [];
+  enemiesQty = 100;
+  Game();
 }
