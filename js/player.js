@@ -5,12 +5,12 @@ function Player() {
   this.context = this.canvas.getContext('2d')
   this.position = { x: mouseX, y: mouseY };
   this.shift = { x: mouseX, y: mouseY };
-  this.size = 5;
-  this.speed = 0.09;
+  this.radius = 5;
+  this.speed = 0.08;
   this.fillColor = '#FFF';
   this.positions = [];
-  this.maxPositions = 70;
-  this.lifePos = 70;
+  this.maxPositions = 80;
+  this.lifePos = 75;
   this.lifeCount = 3;
   this.create = function () {
 
@@ -28,7 +28,7 @@ function Player() {
     //PLAYER BODY
     this.context.beginPath();
     this.context.fillStyle = this.fillColor;
-    this.context.arc(this.position.x, this.position.y,this.size, 0, Math.PI * 2, true);
+    this.context.arc(this.position.x, this.position.y,this.radius, 0, Math.PI * 2, true);
     this.context.fill();
 
     //PLAYER TRAIL
@@ -68,7 +68,7 @@ function Player() {
     for (let j = 1; j <= this.lifeCount; j++) {
       this.context.beginPath();
       this.context.fillStyle = this.fillColor;
-      this.context.arc(this.positions[this.lifePos - 15*j].x, this.positions[this.lifePos - 15*j].y, 3 , 0, Math.PI * 2, true);
+      this.context.arc(this.positions[this.lifePos - 18*j].x, this.positions[this.lifePos - 18*j].y, 3 , 0, Math.PI * 2, true);
       this.context.fill();
     }
 
