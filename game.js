@@ -6,6 +6,8 @@ var SCREEN_HEIGHT = window.innerHeight;
 var mouseX = (window.innerWidth - SCREEN_WIDTH - 10);
 var mouseY = SCREEN_HEIGHT + 10;
 
+var PLAYING = 1;
+
 var enemies = [];
 var enemiesQty = 100;
 
@@ -49,11 +51,11 @@ function Game() {
     //ELEMENTS MOVES
     context.clearRect(0, 0, CANVAS.width, this.CANVAS.height);
     this.player.create()
-    for (var j = 0; j < this.enemies.length; j++) {
-      this.enemies[j].create()
-      //CHECK ENEMIES COLLISION
-      enemyCollision(j)
-    }
+      for (var j = 0; j < this.enemies.length; j++) {
+        this.enemies[j].create()
+        //CHECK ENEMIES COLLISION
+        enemyCollision(j)
+      }
   }, 10);
 }
 function enemyCollision(j) {
@@ -65,9 +67,11 @@ function enemyCollision(j) {
     this.player.lifeCount--
     //DELETE THAT ENEMY
     this.enemies.splice(j, 1)
-    //CREATE NEW ENEMY 
+    //CREATE NEW ENEMY
     const x = Math.random() * (SCREEN_WIDTH * 2);
     const y = Math.random() * -SCREEN_HEIGHT;
     this.enemies.push(new Enemy({ x, y }));
+    //FREEZE ENEMIES
+    this.enemies[j].stopEnemiesMove();
   };
 }
