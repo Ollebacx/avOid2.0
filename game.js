@@ -61,7 +61,13 @@ function enemyCollision(j) {
     this.player.position.y - this.player.distCollision < this.enemies[j].position.y + this.enemies[j].radius &&
     this.player.position.x + this.player.distCollision > this.enemies[j].position.x - this.enemies[j].radius &&
     this.player.position.y + this.player.distCollision > this.enemies[j].position.y - this.enemies[j].radius) {
+    //LIFE -1
     this.player.lifeCount--
+    //DELETE THAT ENEMY
     this.enemies.splice(j, 1)
+    //CREATE NEW ENEMY 
+    const x = Math.random() * (SCREEN_WIDTH * 2);
+    const y = Math.random() * -SCREEN_HEIGHT;
+    this.enemies.push(new Enemy({ x, y }));
   };
 }
