@@ -7,6 +7,13 @@ var mouseX = (window.innerWidth - SCREEN_WIDTH -10);
 var mouseY = SCREEN_HEIGHT + 10;
 
 var enemies = [];
+var enemiesQty = 100;
+
+// if (SCREEN_WIDTH < 800) {
+//   enemiesQty = 100
+// } else {
+//   enemiesQty = 100
+// }
 
 function Game() {
   //REGISTER EVENT LISTENER
@@ -23,11 +30,14 @@ function Game() {
   this.player = new Player()
 
   //ENEMIES QUANTITY
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < enemiesQty; i++) {
     const x = Math.random() * (SCREEN_WIDTH*2);
     const y = Math.random() * -SCREEN_HEIGHT;
     this.enemies.push(new Enemy({ x, y }));
   }
+
+  //COLLISIONS
+  this.collision = new Collision()
 
   //START GAME
   setInterval(function () {
@@ -40,10 +50,11 @@ function Game() {
     }
     //ELEMENTS MOVES
     context.clearRect(0, 0, CANVAS.width, this.CANVAS.height);
-    this.enemies.forEach ( enemy => {
-      enemy.create();
-    })
     this.player.create()
+    for (var j = 0; j < this.enemies.length; j++){
+      this.enemies[j].create()
+      console.log(this.player.position);
+    }
+    this.collision.check();
   }, 10);
-
 }

@@ -5,11 +5,13 @@ function Player() {
   this.context = this.canvas.getContext('2d')
   this.position = { x: mouseX, y: mouseY };
   this.shift = { x: mouseX, y: mouseY };
-  this.size = 10;
+  this.size = 5;
   this.speed = 0.09;
   this.fillColor = '#FFF';
   this.positions = [];
-  this.maxPositions = 60;
+  this.maxPositions = 70;
+  this.lifePos = 70;
+  this.lifeCount = 3;
   this.create = function () {
 
     //PLAYER MOVE(FIRST:CLEAR CANVAS)
@@ -26,15 +28,16 @@ function Player() {
     //PLAYER BODY
     this.context.beginPath();
     this.context.fillStyle = this.fillColor;
-    this.context.arc(this.position.x, this.position.y, this.size / 2, 0, Math.PI * 2, true);
+    this.context.arc(this.position.x, this.position.y,this.size, 0, Math.PI * 2, true);
     this.context.fill();
 
     //PLAYER TRAIL
     let history = this.positions, prevPot, nextPot;
     this.context.beginPath();
     this.context.lineWidth = 2;
-    this.context.lineCap = 'round'
+    this.context.lineCap = 'round';
     this.context.strokeStyle = '#F1F1F1';
+
 
     for (let i = 0; i < history.length - 1; i++) {
       prevPot = history[i];
@@ -45,8 +48,8 @@ function Player() {
         this.context.lineTo(nextPot.x, nextPot.y);
       }
       //DIAGONAL TRAIL POSITION
-      prevPot.x -= 0.8;
-      prevPot.y += 0.8;
+      prevPot.x -= this.speed * 10;
+      prevPot.y += this.speed * 10;
     }
     this.context.stroke();
 
@@ -60,5 +63,14 @@ function Player() {
     if (this.positions.length > this.maxPositions) {
       this.positions.splice(0, this.positions.length > this.maxPositions);
     }
+
+    // PLAYER LIFE
+    for (let j = 1; j <= this.lifeCount; j++) {
+      this.context.beginPath();
+      this.context.fillStyle = this.fillColor;
+      this.context.arc(this.positions[this.lifePos - 15*j].x, this.positions[this.lifePos - 15*j].y, 3 , 0, Math.PI * 2, true);
+      this.context.fill();
+    }
+
   }
 }

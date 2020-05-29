@@ -5,7 +5,7 @@ function Enemy(positions) {
   this.context = this.canvas.getContext('2d')
   this.position = { x: positions.x, y: positions.y };
   this.size = Math.random()*5+8;
-  this.speed = Math.random()*0.2+1;
+  this.speed = Math.random()*2+1;
   this.fillColor = 'red';
   this.create = function () {
 
@@ -23,6 +23,9 @@ function Enemy(positions) {
     if (this.position.y > this.canvas.height + 10) {
       this.position.y = -10 + Math.random() * -30;
     }
+
+    // DETECT COLLISION
+    
 
     //ENEMIES BODY
     this.context.beginPath();
