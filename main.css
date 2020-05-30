@@ -11,15 +11,15 @@ body {
     border: 1px solid rgb(255, 0, 0);
     border-radius: 4%;
     padding: 10px 60px;
-    transition: all 1s ease;
-    z-index: 10000;
+    transition: all .5s ease;
+    z-index: 10;
     position: absolute;
-    /* margin-top:28vh; */
-    /* left: 380px; */
-    /* top: 250px; */
+    margin-top: -48.335px;
+    margin-left: -89.335px;
+    left: 50%;
+    top: 50%;
 }
-#start:hover
-{
+#start-button:hover {
   cursor: pointer !important;
   background-color: red;
   color: black;
