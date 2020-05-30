@@ -12,14 +12,9 @@ function Enemy(positions) {
     //ENEMIES MOVE(FIRST:CLEAR CANVAS)
     // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // APPLY POSITION IF PLAYING
-    if (PLAYING === 1) {
+    // APPLY POSITION
       this.position.x -= this.speed;
       this.position.y += this.speed;
-    } else {
-      this.position.x = this.position.x;
-      this.position.y = this.position.y;
-    }
 
     // RESET POSITION WHEN CANVAS END
     if (this.position.x < -10) {
@@ -36,7 +31,4 @@ function Enemy(positions) {
     this.context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
     this.context.fill();
   };
-  this.stopEnemiesMove = function () {
-    PLAYING = 0;
-  }
 }

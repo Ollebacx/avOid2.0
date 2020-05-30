@@ -20,7 +20,10 @@ body {
 }
 #start:hover
 {
-  cursor: pointer;
+  cursor: pointer !important;
   background-color: red;
   color: black;
+}
+.desactivate {
+    display:none;
 }
