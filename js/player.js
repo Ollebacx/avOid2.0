@@ -3,8 +3,8 @@ function Player() {
   // console.log(mouseX)
   this.canvas = CANVAS;
   this.context = this.canvas.getContext('2d')
-  this.position = { x: mouseX, y: mouseY };
-  this.shift = { x: mouseX, y: mouseY };
+  this.position = { x: -10, y: this.canvas.height + 10 };
+  this.shift = { x: -10, y: this.canvas.height + 10 };
   this.radius = 5;
   this.speed = 0.08;
   this.fillColor = '#FFF';
