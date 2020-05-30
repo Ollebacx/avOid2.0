@@ -14,7 +14,6 @@ function Player() {
   this.lifeCount = 3;
   this.invencible = false;
   this.create = function () {
-
     //PLAYER MOVE(FIRST:CLEAR CANVAS)
     // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -69,8 +68,10 @@ function Player() {
     for (let j = 1; j <= this.lifeCount; j++) {
       this.context.beginPath();
       this.context.fillStyle = this.fillColor;
-      this.context.arc(this.positions[this.lifePos - 18*j].x, this.positions[this.lifePos - 18*j].y, 3 , 0, Math.PI * 2, true);
-      this.context.fill();
+      if (this.positions[this.lifePos - 18 * j] && this.positions[this.lifePos - 18 * j]) {
+        this.context.arc(this.positions[this.lifePos - 18*j].x, this.positions[this.lifePos - 18*j].y, 3 , 0, Math.PI * 2, true);
+        this.context.fill();
+      }
     }
 
   }

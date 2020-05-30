@@ -7,7 +7,7 @@ var SCREEN_HEIGHT = window.innerHeight;
 var mouseX = (window.innerWidth - SCREEN_WIDTH - 10);
 var mouseY = SCREEN_HEIGHT + 10;
 
-var startBtn = document.getElementById('start-button')
+var startBtn = document.getElementById('start-button');
 var PLAYING = false;
 var PAUSE = false;
 
@@ -15,6 +15,7 @@ var enemies = [];
 var enemiesQty = 100;
 
 var score = 0;
+var fps = 0;
 
 // if (SCREEN_WIDTH < 800) {
 //   enemiesQty = 100
@@ -22,7 +23,7 @@ var score = 0;
 //   enemiesQty = 100
 // }
 
-function Game() {
+function loadGame() {
   //REGISTER EVENT LISTENER
   document.addEventListener('mousemove', function (event) {
     mouseX = event.clientX - (window.innerWidth - SCREEN_WIDTH) * .5;
@@ -43,54 +44,57 @@ function Game() {
     const y = Math.random() * -SCREEN_HEIGHT;
     this.enemies.push(new Enemy({ x, y }));
   }
+  animation();
+}
 
-  //START ANIMATION
-  ANIMATION = setInterval(function () {
-      if (!PAUSE) {
-        //RESPONSIVE MAP
-        if (SCREEN_WIDTH != window.innerWidth || SCREEN_HEIGHT != window.innerHeight) {
-          SCREEN_WIDTH = window.innerWidth;
-          SCREEN_HEIGHT = window.innerHeight;
-          map.resize()
-        }
+function animation() {
+  if (!PAUSE) {
+    //RESPONSIVE MAP
+    if (SCREEN_WIDTH != window.innerWidth || SCREEN_HEIGHT != window.innerHeight) {
+      SCREEN_WIDTH = window.innerWidth;
+      SCREEN_HEIGHT = window.innerHeight;
+      map.resize()
+    }
 
-        //ERASE CANVAS
-        context.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);
+    //ERASE CANVAS
+    context.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);
 
-        //BUTTON START TO PLAY
-        if (PLAYING) {
-          //PLAYER MOVES
-          this.player.create();
-          //SCORE COUNTS
-          score++;
-          //FINISH GAME
-          if (this.player.lifeCount === -1) {
-            endGame();
-            resetGame();
-          }
-        }
-
-        //BACKGROUND ENEMIES
-        for (var j = 0; j < this.enemies.length; j++) {
-          this.enemies[j].create();
-          //CHECK ENEMIES COLLISION PLAYING
-          if (PLAYING) {
-            enemyCollision(j);
-          }
-        }
-
-        //GAME PANEL (LEVEL & SCORE)
-        context.fillStyle = "rgba(0,0,0, 0.8)";
-        context.fillRect(0, 0, this.CANVAS.width, 40);
-        context.fillStyle = "rgba(255,255,255, 1)";
-        context.font = "32px Quicksand";
-        context.fillText("avOid", this.CANVAS.width - 104, 30);
-        context.font = "14px Quicksand";
-        context.fillText("Level: 1", 20, 25);
-        context.fillText("Score: " + score, 80, 25);
+    //BUTTON START PRESSED TO PLAY
+    if (PLAYING) {
+      //PLAYER MOVES
+      this.player.create();
+      //SCORE COUNTS
+      score++;
+      //FINISH GAME
+      if (this.player.lifeCount === -1) {
+        endGame();
+        startGame();
       }
+    }
 
-  }, 10)
+    //BACKGROUND ENEMIES
+    for (var j = 0; j < this.enemies.length; j++) {
+      this.enemies[j].create();
+      //CHECK ENEMIES COLLISION PLAYING
+      if (PLAYING) {
+        enemyCollision(j);
+      }
+    }
+
+    //GAME PANEL (LEVEL & SCORE)
+    context.fillStyle = "rgba(0,0,0, 0.8)";
+    context.fillRect(0, 0, this.CANVAS.width, 40);
+    context.fillStyle = "rgba(255,255,255, 1)";
+    context.font = "20px Quicksand";
+    context.fillText("avOid", 20, 27);
+    context.font = "14px Quicksand";
+    context.fillText("Level: 1", 114, 27);
+    context.fillText("Score: " + score, 184, 27);
+    context.fillText("FPS: 60", this.CANVAS.width - 60, 27);
+
+
+  }
+  requestAnimationFrame(animation);
 }
 
 function enemyCollision(j) {
@@ -123,29 +127,32 @@ function enemyCollision(j) {
 }
 
 function startGame() {
-  PLAYING = true;
+  //RESET PLAYER POSITION
+  //RESET ENEMIES
   enemies = [];
   enemiesQty = 100;
-  startBtn.classList.add("desactivate");
-  //RESET ENEMIES QUANTITY
+  //RESET ENEMIES POSITION
   for (let i = 0; i < enemiesQty; i++) {
     const x = Math.random() * (SCREEN_WIDTH * 2);
     const y = Math.random() * -SCREEN_HEIGHT;
     this.enemies.push(new Enemy({ x, y }));
+  };
+  if (startBtn.classList[0] === undefined) { //START GAME
+    this.player.lifeCount = 2;
+    this.player.position = { x: -10, y: this.canvas.height + 10 };
+    this.player.shift = { x: -10, y: this.canvas.height + 10 };
+    this.player.positions = [];
+    startBtn.classList.add("desactivate");
+    PLAYING = true;
+  } else { //LOAD PREGAME
+    startBtn.classList.remove("desactivate");
+    PLAYING = false;
   }
 }
 
 function endGame() {
   PLAYING = false;
   alert('¿QUÉ TE CREÍSTE JORÍO QUE ESTO ES JAUJA O QUÉ? PERDISTE MI NIÑO NO TE QUEDAN VIDAS PERDISTEEE')
-}
-
-function resetGame() {
-  enemies = [];
-  enemiesQty = 100;
-  startBtn.classList.remove("desactivate");
-  clearInterval(ANIMATION);
-  Game();
 }
 
 function pauseGame() {
@@ -157,12 +164,6 @@ function pauseGame() {
   }
 }
 
-// function playGame() {
-//   PLAYING = true;
-//   enemies = [];
-//   enemiesQty = 100;
-//   this.start()
-// }
 
 //CHETOS
 var color;
