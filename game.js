@@ -9,17 +9,20 @@ var mouseY = SCREEN_HEIGHT + 10;
 
 var startBtn = document.getElementById('start-button')
 var PLAYING = false;
+var PAUSE = false;
 
 var enemies = [];
 var enemiesQty = 100;
 
-// if (SCREEN_WIDTH < 800) {
-  //   enemiesQty = 100
-  // } else {
-    //   enemiesQty = 100
-    // }
+var score = 0;
 
-    function Game() {
+// if (SCREEN_WIDTH < 800) {
+//   enemiesQty = 100
+// } else {
+//   enemiesQty = 100
+// }
+
+function Game() {
   //REGISTER EVENT LISTENER
   document.addEventListener('mousemove', function (event) {
     mouseX = event.clientX - (window.innerWidth - SCREEN_WIDTH) * .5;
@@ -40,48 +43,55 @@ var enemiesQty = 100;
     const y = Math.random() * -SCREEN_HEIGHT;
     this.enemies.push(new Enemy({ x, y }));
   }
-  //CREATE ENEMIES BEFORE PLAYING
-  if (!PLAYING) {
-    BACKGROUND = setInterval(function () {
-      if (SCREEN_WIDTH != window.innerWidth || SCREEN_HEIGHT != window.innerHeight) {
-        SCREEN_WIDTH = window.innerWidth;
-        SCREEN_HEIGHT = window.innerHeight;
-        map.resize()
-      }
-      context.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);
-      for (var j = 0; j < this.enemies.length; j++) {
-        this.enemies[j].create()
-      }
-    }, 10);
-  }
 
-  //START GAME
-  if (PLAYING) {
-    console.log(PLAYING);
-      START = setInterval(function () {
+  //START ANIMATION
+  ANIMATION = setInterval(function () {
+      if (!PAUSE) {
         //RESPONSIVE MAP
         if (SCREEN_WIDTH != window.innerWidth || SCREEN_HEIGHT != window.innerHeight) {
           SCREEN_WIDTH = window.innerWidth;
           SCREEN_HEIGHT = window.innerHeight;
-          // console.log(SCREEN_WIDTH)
           map.resize()
         }
-        //ELEMENTS MOVES
+
+        //ERASE CANVAS
         context.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);
-        this.player.create()
+
+        //BUTTON START TO PLAY
+        if (PLAYING) {
+          //PLAYER MOVES
+          this.player.create();
+          //SCORE COUNTS
+          score++;
+          //FINISH GAME
+          if (this.player.lifeCount === -1) {
+            endGame();
+            resetGame();
+          }
+        }
+
+        //BACKGROUND ENEMIES
         for (var j = 0; j < this.enemies.length; j++) {
-          this.enemies[j].create()
-          //CHECK ENEMIES COLLISION
-          enemyCollision(j)
+          this.enemies[j].create();
+          //CHECK ENEMIES COLLISION PLAYING
+          if (PLAYING) {
+            enemyCollision(j);
+          }
         }
-        //FINISH GAME
-        if (this.player.lifeCount === -1) {
-          endGame();
-          resetGame();
-        }
-      }, 10);
-    }
-  }
+
+        //GAME PANEL (LEVEL & SCORE)
+        context.fillStyle = "rgba(0,0,0, 0.8)";
+        context.fillRect(0, 0, this.CANVAS.width, 40);
+        context.fillStyle = "rgba(255,255,255, 1)";
+        context.font = "32px Quicksand";
+        context.fillText("avOid", this.CANVAS.width - 104, 30);
+        context.font = "14px Quicksand";
+        context.fillText("Level: 1", 20, 25);
+        context.fillText("Score: " + score, 80, 25);
+      }
+
+  }, 10)
+}
 
 function enemyCollision(j) {
   if (!this.player.invencible) {
@@ -89,7 +99,7 @@ function enemyCollision(j) {
       this.player.position.y - this.player.distCollision < this.enemies[j].position.y + this.enemies[j].radius &&
       this.player.position.x + this.player.distCollision > this.enemies[j].position.x - this.enemies[j].radius &&
       this.player.position.y + this.player.distCollision > this.enemies[j].position.y - this.enemies[j].radius) {
-        //LIFE -1
+      //LIFE -1
       this.player.lifeCount--
       //DELETE THAT ENEMY
       this.enemies.splice(j, 1)
@@ -112,8 +122,20 @@ function enemyCollision(j) {
   }
 }
 
+function startGame() {
+  PLAYING = true;
+  enemies = [];
+  enemiesQty = 100;
+  startBtn.classList.add("desactivate");
+  //RESET ENEMIES QUANTITY
+  for (let i = 0; i < enemiesQty; i++) {
+    const x = Math.random() * (SCREEN_WIDTH * 2);
+    const y = Math.random() * -SCREEN_HEIGHT;
+    this.enemies.push(new Enemy({ x, y }));
+  }
+}
+
 function endGame() {
-  clearInterval(START);
   PLAYING = false;
   alert('¿QUÉ TE CREÍSTE JORÍO QUE ESTO ES JAUJA O QUÉ? PERDISTE MI NIÑO NO TE QUEDAN VIDAS PERDISTEEE')
 }
@@ -122,21 +144,17 @@ function resetGame() {
   enemies = [];
   enemiesQty = 100;
   startBtn.classList.remove("desactivate");
-  Game();
-}
-
-function startGame() {
-  clearInterval(BACKGROUND);
-  startBtn.classList.add("desactivate");
-  PLAYING = true;
-  enemies = [];
-  enemiesQty = 100;
+  clearInterval(ANIMATION);
   Game();
 }
 
 function pauseGame() {
-  clearInterval(START);
-  PLAYING = false;
+  PAUSE = !PAUSE;
+  if (PAUSE) {
+    context.fillStyle = "rgba(255,255,255, 1)"
+    context.fillRect(this.CANVAS.width / 2 - 50, this.CANVAS.height / 2 - 90, 30, 90);
+    context.fillRect(this.CANVAS.width / 2 + 10, this.CANVAS.height / 2 - 90, 30, 90);
+  }
 }
 
 // function playGame() {
@@ -158,27 +176,22 @@ function applyRandomColor() {
 }
 
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'z') {
+  if (event.key === 'q') {
     this.player.lifeCount = 3;
   }
-  if (event.key === 'x') {
-    this.player.invencible = true;
-    COLOR = setInterval(applyRandomColor, 100);
+  if (event.key === 'w') {
+    if (this.player.invencible) {
+      clearInterval(COLOR);
+      this.player.fillColor = '#FFF';
+    } else {
+      COLOR = setInterval(applyRandomColor, 100);
+    }
+    this.player.invencible = !this.player.invencible;
   }
-  if (event.key === 's') {
-    this.player.invencible = false;
-    clearInterval(COLOR);
-    this.player.fillColor = '#FFF';
-  }
-  if (event.key === 'c') {
+  if (event.key === 'e') {
     if (PLAYING) {
       pauseGame();
-      console.log('pause');
     }
-    // else {
-    //   playGame();
-    //   console.log('play');
-    // }
   }
   // const keyName = event.key;
   // alert('keydown event\n\n' + 'key: ' + keyName);
