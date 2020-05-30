@@ -12,6 +12,7 @@ function Player() {
   this.maxPositions = 80;
   this.lifePos = 75;
   this.lifeCount = 3;
+  this.invencible = false;
   this.create = function () {
 
     //PLAYER MOVE(FIRST:CLEAR CANVAS)
@@ -36,7 +37,7 @@ function Player() {
     this.context.beginPath();
     this.context.lineWidth = 2;
     this.context.lineCap = 'round';
-    this.context.strokeStyle = '#F1F1F1';
+    this.context.strokeStyle = this.fillColor;
 
 
     for (let i = 0; i < history.length - 1; i++) {

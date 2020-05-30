@@ -56,47 +56,60 @@ function Game() {
   }
 
   //START GAME
-    if (PLAYING) {
-      console.log(PLAYING);
-      START = setInterval(function () {
-        //RESPONSIVE MAP
-        if (SCREEN_WIDTH != window.innerWidth || SCREEN_HEIGHT != window.innerHeight) {
-          SCREEN_WIDTH = window.innerWidth;
-          SCREEN_HEIGHT = window.innerHeight;
-          // console.log(SCREEN_WIDTH)
-          map.resize()
-        }
-        //ELEMENTS MOVES
-        context.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);
-        this.player.create()
-        for (var j = 0; j < this.enemies.length; j++) {
-          this.enemies[j].create()
-          //CHECK ENEMIES COLLISION
-          enemyCollision(j)
-        }
-        //FINISH GAME
-        if (this.player.lifeCount === -1) {
-          endGame();
-          resetGame();
-        }
-      }, 10);
-    }
+  if (PLAYING) {
+    console.log(PLAYING);
+    START = setInterval(function () {
+      //RESPONSIVE MAP
+      if (SCREEN_WIDTH != window.innerWidth || SCREEN_HEIGHT != window.innerHeight) {
+        SCREEN_WIDTH = window.innerWidth;
+        SCREEN_HEIGHT = window.innerHeight;
+        // console.log(SCREEN_WIDTH)
+        map.resize()
+      }
+      //ELEMENTS MOVES
+      context.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);
+      this.player.create()
+      for (var j = 0; j < this.enemies.length; j++) {
+        this.enemies[j].create()
+        //CHECK ENEMIES COLLISION
+        enemyCollision(j)
+      }
+      //FINISH GAME
+      if (this.player.lifeCount === -1) {
+        endGame();
+        resetGame();
+      }
+    }, 10);
+  }
 }
 
 function enemyCollision(j) {
-  if (this.player && this.player.position.x - this.player.distCollision < this.enemies[j].position.x + this.enemies[j].radius &&
-    this.player.position.y - this.player.distCollision < this.enemies[j].position.y + this.enemies[j].radius &&
-    this.player.position.x + this.player.distCollision > this.enemies[j].position.x - this.enemies[j].radius &&
-    this.player.position.y + this.player.distCollision > this.enemies[j].position.y - this.enemies[j].radius) {
-    //LIFE -1
-    this.player.lifeCount--
-    //DELETE THAT ENEMY
-    this.enemies.splice(j, 1)
-    //CREATE NEW ENEMY
-    const x = Math.random() * (SCREEN_WIDTH * 2);
-    const y = Math.random() * -SCREEN_HEIGHT;
-    this.enemies.push(new Enemy({ x, y }));
-  };
+  if (!this.player.invencible) {
+    if (this.player && this.player.position.x - this.player.distCollision < this.enemies[j].position.x + this.enemies[j].radius &&
+      this.player.position.y - this.player.distCollision < this.enemies[j].position.y + this.enemies[j].radius &&
+      this.player.position.x + this.player.distCollision > this.enemies[j].position.x - this.enemies[j].radius &&
+      this.player.position.y + this.player.distCollision > this.enemies[j].position.y - this.enemies[j].radius) {
+      //LIFE -1
+      this.player.lifeCount--
+      //DELETE THAT ENEMY
+      this.enemies.splice(j, 1)
+      //DAMAGE BLINK
+      var OFF = setInterval(function () { this.player.fillColor = '#000'; }, 100);
+      var ON = setInterval(function () { this.player.fillColor = '#FFF'; }, 200);
+      //MAKE PLAYER INVENCIBLE
+      this.player.invencible = true;
+      //END BLINK & INVENCIBLE
+      setTimeout(() => {
+        clearInterval(OFF);
+        clearInterval(ON);
+        this.player.invencible = false;
+      }, 1600);
+      //CREATE NEW ENEMY
+      const x = Math.random() * (SCREEN_WIDTH * 2);
+      const y = Math.random() * -SCREEN_HEIGHT;
+      this.enemies.push(new Enemy({ x, y }));
+    };
+  }
 }
 
 function endGame() {
