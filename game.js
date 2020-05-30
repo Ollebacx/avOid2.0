@@ -14,12 +14,12 @@ var enemies = [];
 var enemiesQty = 100;
 
 // if (SCREEN_WIDTH < 800) {
-//   enemiesQty = 100
-// } else {
-//   enemiesQty = 100
-// }
+  //   enemiesQty = 100
+  // } else {
+    //   enemiesQty = 100
+    // }
 
-function Game() {
+    function Game() {
   //REGISTER EVENT LISTENER
   document.addEventListener('mousemove', function (event) {
     mouseX = event.clientX - (window.innerWidth - SCREEN_WIDTH) * .5;
@@ -58,30 +58,30 @@ function Game() {
   //START GAME
   if (PLAYING) {
     console.log(PLAYING);
-    START = setInterval(function () {
-      //RESPONSIVE MAP
-      if (SCREEN_WIDTH != window.innerWidth || SCREEN_HEIGHT != window.innerHeight) {
-        SCREEN_WIDTH = window.innerWidth;
-        SCREEN_HEIGHT = window.innerHeight;
-        // console.log(SCREEN_WIDTH)
-        map.resize()
-      }
-      //ELEMENTS MOVES
-      context.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);
-      this.player.create()
-      for (var j = 0; j < this.enemies.length; j++) {
-        this.enemies[j].create()
-        //CHECK ENEMIES COLLISION
-        enemyCollision(j)
-      }
-      //FINISH GAME
-      if (this.player.lifeCount === -1) {
-        endGame();
-        resetGame();
-      }
-    }, 10);
+      START = setInterval(function () {
+        //RESPONSIVE MAP
+        if (SCREEN_WIDTH != window.innerWidth || SCREEN_HEIGHT != window.innerHeight) {
+          SCREEN_WIDTH = window.innerWidth;
+          SCREEN_HEIGHT = window.innerHeight;
+          // console.log(SCREEN_WIDTH)
+          map.resize()
+        }
+        //ELEMENTS MOVES
+        context.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);
+        this.player.create()
+        for (var j = 0; j < this.enemies.length; j++) {
+          this.enemies[j].create()
+          //CHECK ENEMIES COLLISION
+          enemyCollision(j)
+        }
+        //FINISH GAME
+        if (this.player.lifeCount === -1) {
+          endGame();
+          resetGame();
+        }
+      }, 10);
+    }
   }
-}
 
 function enemyCollision(j) {
   if (!this.player.invencible) {
@@ -89,7 +89,7 @@ function enemyCollision(j) {
       this.player.position.y - this.player.distCollision < this.enemies[j].position.y + this.enemies[j].radius &&
       this.player.position.x + this.player.distCollision > this.enemies[j].position.x - this.enemies[j].radius &&
       this.player.position.y + this.player.distCollision > this.enemies[j].position.y - this.enemies[j].radius) {
-      //LIFE -1
+        //LIFE -1
       this.player.lifeCount--
       //DELETE THAT ENEMY
       this.enemies.splice(j, 1)
@@ -114,7 +114,7 @@ function enemyCollision(j) {
 
 function endGame() {
   clearInterval(START);
-  PLAYING = 0;
+  PLAYING = false;
   alert('¿QUÉ TE CREÍSTE JORÍO QUE ESTO ES JAUJA O QUÉ? PERDISTE MI NIÑO NO TE QUEDAN VIDAS PERDISTEEE')
 }
 
@@ -128,8 +128,58 @@ function resetGame() {
 function startGame() {
   clearInterval(BACKGROUND);
   startBtn.classList.add("desactivate");
-  PLAYING = 1;
+  PLAYING = true;
   enemies = [];
   enemiesQty = 100;
   Game();
 }
+
+function pauseGame() {
+  clearInterval(START);
+  PLAYING = false;
+}
+
+// function playGame() {
+//   PLAYING = true;
+//   enemies = [];
+//   enemiesQty = 100;
+//   this.start()
+// }
+
+//CHETOS
+var color;
+function applyRandomColor() {
+  var letters = '0123456789ABCDEF';
+  color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  this.player.fillColor = color;
+}
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'z') {
+    this.player.lifeCount = 3;
+  }
+  if (event.key === 'x') {
+    this.player.invencible = true;
+    COLOR = setInterval(applyRandomColor, 100);
+  }
+  if (event.key === 's') {
+    this.player.invencible = false;
+    clearInterval(COLOR);
+    this.player.fillColor = '#FFF';
+  }
+  if (event.key === 'c') {
+    if (PLAYING) {
+      pauseGame();
+      console.log('pause');
+    }
+    // else {
+    //   playGame();
+    //   console.log('play');
+    // }
+  }
+  // const keyName = event.key;
+  // alert('keydown event\n\n' + 'key: ' + keyName);
+});
