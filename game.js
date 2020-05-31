@@ -12,7 +12,7 @@ var PLAYING = false;
 var PAUSE = false;
 
 var enemies = [];
-var enemiesQty = 100;
+var enemiesQty = 80;
 
 var particles = [];
 var particlesQty = 20;
@@ -145,7 +145,7 @@ function enemyCollision(j) {
 function startGame() {
   //RESET ENEMIES
   enemies = [];
-  enemiesQty = 100;
+  enemiesQty = 80;
   //RESET ENEMIES POSITION
   for (let i = 0; i < enemiesQty; i++) {
     const x = Math.random() * (SCREEN_WIDTH * 2);

@@ -4,8 +4,8 @@ function Enemy(positions) {
   this.canvas = CANVAS;
   this.context = this.canvas.getContext('2d')
   this.position = { x: positions.x, y: positions.y };
-  this.radius = Math.random() * 3 + 4;
-  this.speed = Math.random() * 2 + 1;
+  this.radius = Math.random() * 2 + 4;
+  this.speed = Math.random() + 1;
   this.fillColor = 'red';
   this.create = function () {
 
