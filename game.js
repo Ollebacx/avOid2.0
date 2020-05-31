@@ -14,6 +14,9 @@ var PAUSE = false;
 var enemies = [];
 var enemiesQty = 100;
 
+var particles = [];
+var particlesQty = 20;
+
 var score = 0;
 var fps = 0;
 
@@ -73,11 +76,15 @@ function animation() {
     }
 
     //BACKGROUND ENEMIES
-    for (var j = 0; j < this.enemies.length; j++) {
+    for (let j = 0; j < this.enemies.length - 1; j++) {
       this.enemies[j].create();
       //CHECK ENEMIES COLLISION PLAYING
       if (PLAYING) {
         enemyCollision(j);
+        //PARTICLES EXPLOSION
+        for (let k = 0; k < this.particles.length - 1; k++) {
+          this.particles[k].create();
+        }
       }
     }
 
@@ -98,18 +105,16 @@ function animation() {
 }
 
 function enemyCollision(j) {
-  if (!this.player.invencible) {
-    if (this.player && this.player.position.x - this.player.distCollision < this.enemies[j].position.x + this.enemies[j].radius &&
-      this.player.position.y - this.player.distCollision < this.enemies[j].position.y + this.enemies[j].radius &&
-      this.player.position.x + this.player.distCollision > this.enemies[j].position.x - this.enemies[j].radius &&
-      this.player.position.y + this.player.distCollision > this.enemies[j].position.y - this.enemies[j].radius) {
+  if (this.player && this.player.position.x - this.player.distCollision < this.enemies[j].position.x + this.enemies[j].radius &&
+    this.player.position.y - this.player.distCollision < this.enemies[j].position.y + this.enemies[j].radius &&
+    this.player.position.x + this.player.distCollision > this.enemies[j].position.x - this.enemies[j].radius &&
+    this.player.position.y + this.player.distCollision > this.enemies[j].position.y - this.enemies[j].radius) {
+    if (!this.player.invencible) {
       //LIFE -1
       this.player.lifeCount--
-      //DELETE THAT ENEMY
-      this.enemies.splice(j, 1)
       //DAMAGE BLINK
-      var OFF = setInterval(function () { this.player.fillColor = '#000'; }, 100);
-      var ON = setInterval(function () { this.player.fillColor = '#FFF'; }, 200);
+      var OFF = setInterval(function () { this.player.fillColor = '#111'; }, 10);
+      var ON = setInterval(function () { this.player.fillColor = '#FFF'; }, 20);
       //MAKE PLAYER INVENCIBLE
       this.player.invencible = true;
       //END BLINK & INVENCIBLE
@@ -117,17 +122,27 @@ function enemyCollision(j) {
         clearInterval(OFF);
         clearInterval(ON);
         this.player.invencible = false;
-      }, 1600);
-      //CREATE NEW ENEMY
-      const x = Math.random() * (SCREEN_WIDTH * 2);
-      const y = Math.random() * -SCREEN_HEIGHT;
-      this.enemies.push(new Enemy({ x, y }));
+      }, 1000);
+    } else { //PLAYER IS INVENCIBLE
+      score += 500;
+    }
+
+    //PARTICLES EXPLOSION QUANTITY
+    particles = []
+    for (let i = 0; i < particlesQty; i++) {
+      particles.push(new Particle(this.enemies[j].position, this.enemies[j].radius));
     };
+
+    //DELETE THAT ENEMY
+    this.enemies.splice(j, 1)
+    //CREATE NEW ENEMY
+    const x = Math.random() * (SCREEN_WIDTH * 2);
+    const y = Math.random() * -SCREEN_HEIGHT;
+    this.enemies.push(new Enemy({ x, y }));
   }
 }
 
 function startGame() {
-  //RESET PLAYER POSITION
   //RESET ENEMIES
   enemies = [];
   enemiesQty = 100;
@@ -138,6 +153,7 @@ function startGame() {
     this.enemies.push(new Enemy({ x, y }));
   };
   if (startBtn.classList[0] === undefined) { //START GAME
+    //RESET PLAYER
     this.player.lifeCount = 2;
     this.player.position = { x: -10, y: this.canvas.height + 10 };
     this.player.shift = { x: -10, y: this.canvas.height + 10 };
