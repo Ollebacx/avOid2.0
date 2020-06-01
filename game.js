@@ -14,6 +14,11 @@ var PAUSE = false;
 var enemies = [];
 var enemiesQty = 80;
 
+var boost = [];
+var boostQty = 3;
+
+var SHIELD = false;
+
 var particles = [];
 var particlesQty = 20;
 
@@ -47,6 +52,13 @@ function loadGame() {
     const y = Math.random() * -SCREEN_HEIGHT;
     this.enemies.push(new Enemy({ x, y }));
   }
+
+  //BOOST QUANTITY
+  for (let i = 0; i < boostQty; i++) {
+    const x = Math.random() * (SCREEN_WIDTH * 2);
+    const y = Math.random() * -SCREEN_HEIGHT;
+    this.boost.push(new Boost({ x, y }));
+  }
   animation();
 }
 
@@ -62,7 +74,20 @@ function animation() {
     //ERASE CANVAS
     context.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);
 
-    //BUTTON START PRESSED TO PLAY
+    //BACKGROUND BOOST
+    for (let b = 0; b < this.boost.length - 1; b++) {
+      this.boost[b].create();
+      //CHECK BOOST COLLISION PLAYING
+      if (PLAYING) {
+        boostCollision(b);
+        //CREATE SHIELD
+        if (this.player.invencible && SHIELD) {
+          this.player.shield();
+        }
+      }
+    }
+
+    //PLAYER APPEARS WHEN START BTN PRESSED
     if (PLAYING) {
       //PLAYER MOVES
       this.player.create();
@@ -98,7 +123,6 @@ function animation() {
     context.fillText("Level: 1", 114, 27);
     context.fillText("Score: " + score, 184, 27);
     context.fillText("FPS: 60", this.CANVAS.width - 60, 27);
-
 
   }
   requestAnimationFrame(animation);
@@ -142,6 +166,35 @@ function enemyCollision(j) {
   }
 }
 
+function boostCollision(b) {
+  if (this.player && this.player.position.x - this.player.distCollision < this.boost[b].position.x + this.boost[b].radius &&
+    this.player.position.y - this.player.distCollision < this.boost[b].position.y + this.boost[b].radius &&
+    this.player.position.x + this.player.distCollision > this.boost[b].position.x - this.boost[b].radius &&
+    this.player.position.y + this.player.distCollision > this.boost[b].position.y - this.boost[b].radius) {
+
+    //SHIELD
+    if (this.boost[b].fillColor === 'blue') {
+      //MAKE PLAYER INVENCIBLE, ACTIVATE SHIELD & BIGGER RADIUS
+      this.player.invencible = true;
+      SHIELD = true;
+      this.player.distCollision = this.player.shieldRadius - 2;
+      //END INVENCIBLE, SHIELD & SMALLER RADIUS
+      setTimeout(() => {
+        this.player.invencible = false;
+        SHIELD = false;
+        this.player.distCollision = this.player.radius - 2
+      }, 5000);
+    };
+
+    //DELETE THAT BOOST
+    this.boost.splice(b, 1)
+    //CREATE NEW BOOST
+    const x = Math.random() * (SCREEN_WIDTH * 2);
+    const y = Math.random() * -SCREEN_HEIGHT;
+    this.boost.push(new Boost({ x, y }));
+  }
+}
+
 function startGame() {
   //RESET ENEMIES
   enemies = [];
@@ -151,6 +204,15 @@ function startGame() {
     const x = Math.random() * (SCREEN_WIDTH * 2);
     const y = Math.random() * -SCREEN_HEIGHT;
     this.enemies.push(new Enemy({ x, y }));
+  };
+  //RESET BOOST
+  boost = [];
+  boostQty = 3;
+  //RESET BOOST POSITION
+  for (let i = 0; i < boostQty; i++) {
+    const x = Math.random() * (SCREEN_WIDTH * 2);
+    const y = Math.random() * -SCREEN_HEIGHT;
+    this.boost.push(new Boost({ x, y }));
   };
   if (startBtn.classList[0] === undefined) { //START GAME
     //RESET PLAYER

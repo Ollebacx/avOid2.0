@@ -6,6 +6,7 @@ function Player() {
   this.position = { x: -10, y: this.canvas.height + 10 };
   this.shift = { x: -10, y: this.canvas.height + 10 };
   this.radius = 5;
+  this.shieldRadius = 15;
   this.speed = 0.08;
   this.fillColor = '#FFF';
   this.positions = [];
@@ -14,21 +15,22 @@ function Player() {
   this.lifeCount = 3;
   this.invencible = false;
   this.create = function () {
-    //PLAYER MOVE(FIRST:CLEAR CANVAS)
-    // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // FOLLOW MOUSE WITH LAG
-    this.shift.x += (mouseX - this.shift.x) * (this.speed);
-    this.shift.y += (mouseY - this.shift.y) * (this.speed);
+    if (!SHIELD) { //PARA QUE NO SE DUPLIQUE EN THIS.SHIELD
 
-    // APPLY POSITION
-    this.position.x = this.shift.x;
-    this.position.y = this.shift.y;
+      // FOLLOW MOUSE WITH LAG
+      this.shift.x += (mouseX - this.shift.x) * (this.speed);
+      this.shift.y += (mouseY - this.shift.y) * (this.speed);
+
+      // APPLY POSITION
+      this.position.x = this.shift.x;
+      this.position.y = this.shift.y;
+    }
 
     //PLAYER BODY
     this.context.beginPath();
     this.context.fillStyle = this.fillColor;
-    this.context.arc(this.position.x, this.position.y,this.radius, 0, Math.PI * 2, true);
+    this.context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
     this.context.fill();
 
     //PLAYER TRAIL
@@ -37,7 +39,6 @@ function Player() {
     this.context.lineWidth = 2;
     this.context.lineCap = 'round';
     this.context.strokeStyle = this.fillColor;
-
 
     for (let i = 0; i < history.length - 1; i++) {
       prevPot = history[i];
@@ -64,15 +65,30 @@ function Player() {
       this.positions.splice(0, this.positions.length > this.maxPositions);
     }
 
-    // PLAYER LIFE
+    // PLAYER LIFES
     for (let j = 1; j <= this.lifeCount; j++) {
       this.context.beginPath();
       this.context.fillStyle = this.fillColor;
       if (this.positions[this.lifePos - 18 * j] && this.positions[this.lifePos - 18 * j]) {
-        this.context.arc(this.positions[this.lifePos - 18*j].x, this.positions[this.lifePos - 18*j].y, 3 , 0, Math.PI * 2, true);
+        this.context.arc(this.positions[this.lifePos - 18 * j].x, this.positions[this.lifePos - 18 * j].y, 3, 0, Math.PI * 2, true);
         this.context.fill();
       }
     }
+  };
+  this.shield = function () {
 
-  }
+    // FOLLOW MOUSE WITH LAG
+    this.shift.x += (mouseX - this.shift.x) * (this.speed);
+    this.shift.y += (mouseY - this.shift.y) * (this.speed);
+
+    // APPLY POSITION
+    this.position.x = this.shift.x;
+    this.position.y = this.shift.y;
+
+    //SHIELD BODY
+    this.context.beginPath();
+    this.context.fillStyle = 'blue';
+    this.context.arc(this.position.x, this.position.y, this.shieldRadius, 0, Math.PI * 2, true);
+    this.context.fill();
+  };
 }
