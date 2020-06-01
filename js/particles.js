@@ -27,14 +27,14 @@ function Particle(position, enemyRad) {
     this.position.y += this.yVel;
 
     //STOP DRAWING
-    if (this.position.x < -10 || this.position.y > this.canvas.height + 10) {
-      return;
-    }
-
+    if (this.radius < 0.05) {
+      // console.log("hi");
+    } else {
     //PARTICLES BODY
-    this.context.beginPath();
-    this.context.fillStyle = this.fillColor;
-    this.context.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI, false);
-    this.context.fill();
+      this.context.beginPath();
+      this.context.fillStyle = this.fillColor;
+      this.context.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI, false);
+      this.context.fill();
+    }
   };
 };
