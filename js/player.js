@@ -14,6 +14,7 @@ function Player() {
   this.lifePos = 75;
   this.lifeCount = 3;
   this.invencible = false;
+  this.invencibleDmg = false;
   this.create = function () {
 
     if (!SHIELD) { //PARA QUE NO SE DUPLIQUE EN THIS.SHIELD
@@ -87,8 +88,30 @@ function Player() {
 
     //SHIELD BODY
     this.context.beginPath();
-    this.context.fillStyle = 'blue';
+    this.context.fillStyle = '#00B2FF';
     this.context.arc(this.position.x, this.position.y, this.shieldRadius, 0, Math.PI * 2, true);
     this.context.fill();
   };
+  this.rainbow = function () {
+    this.rainbowColor = '#';
+    var letters = '0123456789ABCDEF';
+    for (var i = 0; i < 6; i++) {
+      this.rainbowColor += letters[Math.floor(Math.random() * 16)];
+    }
+    this.fillColor = this.rainbowColor;
+  };
+  this.darkness = function () {
+    this.context.fillStyle = '#0F0F0F';
+    this.context.strokeStyle = '#0F0F0F';
+    this.context.lineWidth = 50;
+    //LINEA CIRCUNFERENCIA
+    this.context.beginPath();
+    this.context.arc(this.position.x, this.position.y, 120, 0, Math.PI * 2, true);
+    this.context.stroke();
+    //RECTANGULOS DESDE LOS EXTREMOS
+    this.context.fillRect(0, 0, this.position.x - 100, this.canvas.height);
+    this.context.fillRect(this.position.x + 100, 0, this.canvas.width, this.canvas.height);
+    this.context.fillRect(0, 0, this.canvas.width, this.position.y - 100);
+    this.context.fillRect(0, this.position.y + 100, this.canvas.width, this.canvas.height);
+  }
 }

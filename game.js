@@ -17,12 +17,25 @@ var enemiesQty = 80;
 var boost = [];
 var boostQty = 3;
 
+var DRAWSCORE = false;
+var drawsScoreTimer;
 var SHIELD = false;
+var shieldTimer;
+
+var STAR = document.getElementById('source');
+var RAINBOW = false;
+var rainbowTimer;
+
+var DARK = false;
+var darknessTimer;
 
 var particles = [];
 var particlesQty = 20;
 
 var score = 0;
+var scoreBase = 500;
+var scoreMultiply = 1;
+var scoreSum = 0;
 var fps = 0;
 
 // if (SCREEN_WIDTH < 800) {
@@ -84,6 +97,10 @@ function animation() {
         if (this.player.invencible && SHIELD) {
           this.player.shield();
         }
+        //RAINBOW PROTECTION
+        else if (this.player.invencible && RAINBOW) {
+          this.player.rainbow();
+        }
       }
     }
 
@@ -106,6 +123,11 @@ function animation() {
       //CHECK ENEMIES COLLISION PLAYING
       if (PLAYING) {
         enemyCollision(j);
+        if (DRAWSCORE) {
+          this.context.fillStyle = "rgba(255,255,255, 1)";
+          this.context.font = "12px Quicksand";
+          this.context.fillText('+' + scoreSum, this.player.position.x - 15, this.player.position.y -10)
+        }
         //PARTICLES EXPLOSION
         for (let k = 0; k < this.particles.length - 1; k++) {
           this.particles[k].create();
@@ -113,6 +135,9 @@ function animation() {
       }
     }
 
+    if (DARK) {
+      this.player.darkness();
+    }
     //GAME PANEL (LEVEL & SCORE)
     context.fillStyle = "rgba(0,0,0, 0.8)";
     context.fillRect(0, 0, this.CANVAS.width, 40);
@@ -133,22 +158,36 @@ function enemyCollision(j) {
     this.player.position.y - this.player.distCollision < this.enemies[j].position.y + this.enemies[j].radius &&
     this.player.position.x + this.player.distCollision > this.enemies[j].position.x - this.enemies[j].radius &&
     this.player.position.y + this.player.distCollision > this.enemies[j].position.y - this.enemies[j].radius) {
-    if (!this.player.invencible) {
+    if (!this.player.invencibleDmg && !this.player.invencible) {
       //LIFE -1
       this.player.lifeCount--
+      DARK = false;
       //DAMAGE BLINK
       var OFF = setInterval(function () { this.player.fillColor = '#111'; }, 10);
       var ON = setInterval(function () { this.player.fillColor = '#FFF'; }, 20);
       //MAKE PLAYER INVENCIBLE
-      this.player.invencible = true;
+      this.player.invencibleDmg = true;
       //END BLINK & INVENCIBLE
       setTimeout(() => {
         clearInterval(OFF);
         clearInterval(ON);
-        this.player.invencible = false;
+        this.player.invencibleDmg = false;
       }, 1000);
     } else { //PLAYER IS INVENCIBLE
-      score += 500;
+      clearTimeout(drawsScoreTimer);
+      if (DRAWSCORE) {
+        scoreMultiply++;
+        scoreSum = scoreBase * scoreMultiply
+      } else {
+        scoreSum = scoreBase
+      }
+      score += scoreBase;
+      DRAWSCORE = true;
+      drawsScoreTimer = setTimeout(() => {
+        DRAWSCORE = false;
+        scoreMultiply = 1;
+      }, 1200)
+
     }
 
     //PARTICLES EXPLOSION QUANTITY
@@ -173,17 +212,36 @@ function boostCollision(b) {
     this.player.position.y + this.player.distCollision > this.boost[b].position.y - this.boost[b].radius) {
 
     //SHIELD
-    if (this.boost[b].fillColor === 'blue') {
+    if (this.boost[b].fillColor === '#00B2FF') {
+      clearTimeout(shieldTimer);
       //MAKE PLAYER INVENCIBLE, ACTIVATE SHIELD & BIGGER RADIUS
       this.player.invencible = true;
       SHIELD = true;
       this.player.distCollision = this.player.shieldRadius - 2;
       //END INVENCIBLE, SHIELD & SMALLER RADIUS
-      setTimeout(() => {
+      shieldTimer = setTimeout(() => {
         this.player.invencible = false;
         SHIELD = false;
         this.player.distCollision = this.player.radius - 2
       }, 5000);
+      //RAINBOW
+    } else if (this.boost[b].fillColor === 'yellow') {
+      clearTimeout(rainbowTimer);
+      this.player.invencible = true;
+      RAINBOW = true;
+      // END INVENCIBLE & RAINBOW
+      rainbowTimer = setTimeout(() => {
+        this.player.invencible = false;
+        RAINBOW = false;
+        this.player.fillColor = '#FFF';
+      }, 10000);
+      //DARKNESS
+    } else if (this.boost[b].fillColor === '#0F0F0F') {
+      clearTimeout(darknessTimer);
+      DARK = true;
+      darknessTimer = setTimeout(() => {
+        DARK = false;
+      }, 8000)
     };
 
     //DELETE THAT BOOST
