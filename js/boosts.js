@@ -45,6 +45,13 @@ function Boost(bPositions) {
       this.context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
       this.context.fill()
     }
+    //GRAVITY
+    else if (this.fillColor === 'purple') {
+      this.context.beginPath();
+      this.context.fillStyle = this.fillColor;
+      this.context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
+      this.context.fill()
+    }
   }
 }
 // ESTÁ EN PLAYER

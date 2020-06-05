@@ -36,6 +36,7 @@ var score = 0;
 var scoreBase = 500;
 var scoreMultiply = 1;
 var scoreSum = 0;
+var level = 1;
 var fps = 0;
 
 // if (SCREEN_WIDTH < 800) {
@@ -110,6 +111,28 @@ function animation() {
       this.player.create();
       //SCORE COUNTS
       score++;
+      //LEVEL COUNT
+      if (score > 0 && score < 1000) {
+        level = 1
+      } else if (score > 1000 && score < 2000) {
+        level = 2
+      } else if (score > 2000 && score < 3000) {
+        level = 3
+      } else if (score > 3000 && score < 4000) {
+        level = 4
+      } else if (score > 4000 && score < 5000) {
+        level = 5
+      } else if (score > 5000 && score < 6000) {
+        level = 6
+      } else if (score > 6000 && score < 7000) {
+        level = 7
+      } else if (score > 7000 && score < 8000) {
+        level = 8
+      } else if (score > 8000 && score < 9000) {
+        level = 9
+      } else {
+        level = 10
+      }
       //FINISH GAME
       if (this.player.lifeCount === -1) {
         endGame();
@@ -145,7 +168,7 @@ function animation() {
     context.font = "20px Quicksand";
     context.fillText("avOid", 20, 27);
     context.font = "14px Quicksand";
-    context.fillText("Level: 1", 114, 27);
+    context.fillText("Level: "+ level, 114, 27);
     context.fillText("Score: " + score, 184, 27);
     context.fillText("FPS: 60", this.CANVAS.width - 60, 27);
 

@@ -2,7 +2,7 @@
 function Enemy(positions) {
   // console.log(mouseX)
   this.canvas = CANVAS;
-  this.context = this.canvas.getContext('2d')
+  this.context = this.canvas.getContext('2d');
   this.position = { x: positions.x, y: positions.y };
   this.radius = Math.random() * 2 + 4;
   this.speed = Math.random() + 1;
@@ -12,6 +12,11 @@ function Enemy(positions) {
     //ENEMIES MOVE(FIRST:CLEAR CANVAS)
     // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    //SPEED
+    if (score < 10000) {
+      this.speed = this.speed + parseFloat("0.00" + score)
+    }
+    console.log(this.speed);
     // APPLY POSITION
       this.position.x -= this.speed;
       this.position.y += this.speed;
