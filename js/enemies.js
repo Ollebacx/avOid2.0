@@ -16,7 +16,7 @@ function Enemy(positions) {
     if (score < 10000) {
       this.speed = this.speed + parseFloat("0.00" + score)
     }
-    console.log(this.speed);
+     
     // APPLY POSITION
       this.position.x -= this.speed;
       this.position.y += this.speed;

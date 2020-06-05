@@ -8,6 +8,11 @@ function Boost(bPositions) {
   this.fillColor = this.arrColors[Math.floor(Math.random() * this.arrColors.length)]; //'#00B2FF'
 
   this.create = function () {
+
+    //SPEED
+    if (score < 10000) {
+      this.speed = this.speed + parseFloat("0.00" + score)
+    }
     // APPLY POSITION
     this.position.x -= this.speed;
     this.position.y += this.speed;
