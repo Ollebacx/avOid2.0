@@ -116,7 +116,7 @@ function animation() {
       //SCORE COUNTS
       score++;
       //LEVEL INCREASE EACH 1200 POINTS
-      if (score % 1200 === 0) {
+      if (level < 11 && score % 1200 === 0) {
         level++
       }
       //FINISH GAME
@@ -223,7 +223,10 @@ function boostCollision(b) {
 
     //SHIELD
     if (this.boost[b].fillColor === '#00B2FF') {
+      // IF HAD RAINBOW
       clearTimeout(rainbowTimer);
+      this.player.fillColor = '#FFF';
+
       clearTimeout(shieldTimer);
       //MAKE PLAYER INVENCIBLE, ACTIVATE SHIELD & BIGGER RADIUS
       this.player.invencible = true;
@@ -237,7 +240,11 @@ function boostCollision(b) {
       }, 5000);
       //RAINBOW
     } else if (this.boost[b].fillColor === 'yellow') {
+      // IF HAD SHIELD
       clearTimeout(shieldTimer);
+      SHIELD = false;
+      this.player.distCollision = this.player.radius - 2
+
       clearTimeout(rainbowTimer);
       this.player.invencible = true;
       RAINBOW = true;
@@ -294,14 +301,16 @@ function startGame() {
     const y = Math.random() * -SCREEN_HEIGHT;
     this.boost.push(new Boost({ x, y }));
   };
-  if (panel.classList[0] === undefined) { //START GAME
+  if (!panel.classList[0]) { //START GAME
     //RESET PLAYER
     this.player.lifeCount = 2;
     this.player.position = { x: -10, y: this.canvas.height + 10 };
     this.player.shift = { x: -10, y: this.canvas.height + 10 };
     this.player.positions = [];
+
     panel.classList.add("desactivate");
     document.getElementById(level).classList.remove("selected")
+    score = 0;
     PLAYING = true;
   } else { //LOAD PREGAME
     panel.classList.remove("desactivate");
