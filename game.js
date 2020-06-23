@@ -7,8 +7,10 @@ var SCREEN_HEIGHT = window.innerHeight;
 var mouseX = (window.innerWidth - SCREEN_WIDTH - 10);
 var mouseY = SCREEN_HEIGHT + 10;
 
+var panel = document.getElementById('selectPanel');
 var startBtn = document.getElementById('start-button');
 var PLAYING = false;
+var LEVELCHANGE = false;
 var PAUSE = false;
 
 var enemies = [];
@@ -33,7 +35,7 @@ var particles = [];
 var particlesQty = 20;
 
 var score = 0;
-var scoreBase = 500;
+var scoreBase = 50;
 var scoreMultiply = 1;
 var scoreSum = 0;
 var level = 1;
@@ -72,6 +74,9 @@ function loadGame() {
     const y = Math.random() * -SCREEN_HEIGHT;
     this.boost.push(new Boost({ x, y }));
   }
+  //APPLY CLASS SELECTED TO LEVEL SELECTED
+  selectLevel();
+
   animation();
 }
 
@@ -110,32 +115,15 @@ function animation() {
       this.player.create();
       //SCORE COUNTS
       score++;
-      //LEVEL COUNT
-      if (score > 0 && score < 2000) {
-        level = 1
-      } else if (score > 2000 && score < 4000) {
-        level = 2
-      } else if (score > 4000 && score < 6000) {
-        level = 3
-      } else if (score > 6000 && score < 8000) {
-        level = 4
-      } else if (score > 8000 && score < 10000) {
-        level = 5
-      } else if (score > 10000 && score < 12000) {
-        level = 6
-      } else if (score > 12000 && score < 14000) {
-        level = 7
-      } else if (score > 14000 && score < 16000) {
-        level = 8
-      } else if (score > 16000 && score < 18000) {
-        level = 9
-      } else {
-        level = 10
+      //LEVEL INCREASE EACH 1200 POINTS
+      if (score % 1200 === 0) {
+        level++
       }
       //FINISH GAME
       if (this.player.lifeCount === -1) {
         endGame();
         startGame();
+        selectLevel();
       }
     }
 
@@ -148,7 +136,7 @@ function animation() {
         if (DRAWSCORE) {
           this.context.fillStyle = "rgba(255,255,255, 1)";
           this.context.font = "12px Quicksand";
-          this.context.fillText('+' + scoreSum, this.player.position.x - 15, this.player.position.y -10)
+          this.context.fillText('+' + scoreSum, this.player.position.x - 15, this.player.position.y - 10)
         }
         //PARTICLES EXPLOSION
         for (let k = 0; k < this.particles.length - 1; k++) {
@@ -167,7 +155,7 @@ function animation() {
     context.font = "20px Quicksand";
     context.fillText("avOid", 20, 27);
     context.font = "14px Quicksand";
-    context.fillText("Level: "+ level, 114, 27);
+    context.fillText("Level: " + level, 114, 27);
     context.fillText("Score: " + score, 184, 27);
     context.fillText("FPS: 60", this.CANVAS.width - 60, 27);
 
@@ -277,6 +265,16 @@ function boostCollision(b) {
   }
 }
 
+function selectLevel(userLevel) {
+  var previousL = document.getElementById(level);
+  previousL.classList.remove("selected");
+  var levelSelected = document.getElementById(userLevel || level);
+  levelSelected.classList.add("selected");
+  level = userLevel || level;
+  if (userLevel) {
+    LEVELCHANGE = true;
+  }
+}
 function startGame() {
   //RESET ENEMIES
   enemies = [];
@@ -296,16 +294,17 @@ function startGame() {
     const y = Math.random() * -SCREEN_HEIGHT;
     this.boost.push(new Boost({ x, y }));
   };
-  if (startBtn.classList[0] === undefined) { //START GAME
+  if (panel.classList[0] === undefined) { //START GAME
     //RESET PLAYER
     this.player.lifeCount = 2;
     this.player.position = { x: -10, y: this.canvas.height + 10 };
     this.player.shift = { x: -10, y: this.canvas.height + 10 };
     this.player.positions = [];
-    startBtn.classList.add("desactivate");
+    panel.classList.add("desactivate");
+    document.getElementById(level).classList.remove("selected")
     PLAYING = true;
   } else { //LOAD PREGAME
-    startBtn.classList.remove("desactivate");
+    panel.classList.remove("desactivate");
     PLAYING = false;
   }
 }

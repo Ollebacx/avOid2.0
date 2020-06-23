@@ -4,6 +4,62 @@ body {
 #canvas {
     background-color: #111111;
 }
+#selectPanel {
+  width: 400px;
+  height: 300px;
+  font-family: Quicksand,sans-serif;
+  font-weight: 800;
+    color: lightgray;
+    font-size: 3vh;
+    background-color: rgba(10, 10, 10, 0.8);
+    border: 1px solid rgb(255, 0, 0);
+    border-radius: 4%;
+    padding: 10px 10px;
+    transition: all .5s ease;
+    z-index: 10;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.wrapLevel{
+  width: 80%;
+  z-index: 10;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.level{
+  padding: 10px;
+  margin: auto;
+   font-family: Quicksand,sans-serif;
+  font-weight: 800;
+    color: lightgray;
+    font-size: 2vh;
+    background-color: rgb(180, 3, 3);
+    border-radius: 4%;
+    z-index: 10;
+    border: 1px solid black;
+
+}
+.level:hover {
+  cursor: pointer !important;
+    color: rgb(41, 41, 41);
+    font-size: 2vh;
+    background-color: rgb(255, 255, 255);
+    border-radius: 4%;
+    z-index: 10;
+}
+.selected {
+  cursor: pointer !important;
+    color: rgb(41, 41, 41);
+    font-size: 2vh;
+    background-color: rgb(255, 255, 255);
+    border-radius: 4%;
+    border: 1px solid red;
+    z-index: 10;
+}
 #start-button {
   font-family: Quicksand,sans-serif;
   font-weight: 800;
@@ -17,8 +73,8 @@ body {
     z-index: 10;
     position: absolute;
     left: 50%;
-    top: 50%;
-    transform: translate(-50%, -100%);
+    top: 100%;
+    transform: translate(-50%, -200%);
 }
 #start-button:hover {
   cursor: pointer !important;

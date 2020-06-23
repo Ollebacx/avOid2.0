@@ -6,18 +6,27 @@ function Enemy(positions) {
   this.fillColor = 'red';
   this.create = function () {
 
+    // CHANGE SPEED BY LEVEL ON LIVE BEFORE PLAYING
+    if (LEVELCHANGE) {
+      this.speed = (Math.random() + 1) * (level * .4); // SET SPEED BY LEVEL
+      setTimeout(()=> LEVELCHANGE = false, 100)
+    }
     // APPLY POSITION BY LEVEL
-      this.position.x -= this.speed;
+    this.position.x -= this.speed;
     this.position.y += this.speed;
 
     // RESET POSITION WHEN CANVAS END
     if (this.position.x < -10) {
       this.position.x = canvas.width + 10 + Math.random() * 30;
-      this.speed = (Math.random() + 1) * (level * .4); //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
+      if (PLAYING) {
+        this.speed = (Math.random() + 1) * (level * .4); //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
+      }
     }
     if (this.position.y > CANVAS.height + 10) {
       this.position.y = -10 + Math.random() * -30;
-      this.speed = (Math.random() + 1) * (level * .4); //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
+      if (PLAYING) {
+        this.speed = (Math.random() + 1) * (level * .4); //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
+      }
     }
 
     //ENEMIES BODY

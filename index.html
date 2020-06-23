@@ -8,8 +8,23 @@
   <link rel="stylesheet" href="./main.css">
   <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
 </head>
+
 <body onload="loadGame()">
-<div id="start-button" onclick="startGame()">PLAY</div>
+  <div id="selectPanel">
+    <div class="wrapLevel">
+      <span id="1" class="level" onclick="selectLevel(1)">1</span>
+      <span id="2" class="level" onclick="selectLevel(2)">2</span>
+      <span id="3" class="level" onclick="selectLevel(3)">3</span>
+      <span id="4" class="level" onclick="selectLevel(4)">4</span>
+      <span id="5" class="level" onclick="selectLevel(5)">5</span>
+      <span id="6" class="level" onclick="selectLevel(6)">6</span>
+      <span id="7" class="level" onclick="selectLevel(7)">7</span>
+      <span id="8" class="level" onclick="selectLevel(8)">8</span>
+      <span id="9" class="level" onclick="selectLevel(9)">9</span>
+      <span id="10" class="level" onclick="selectLevel(10)">10</span>
+    </div>
+    <div id="start-button" onclick="startGame()">PLAY</div>
+  </div>
   <canvas id="canvas">
   </canvas>
   <div style="display:none;">
