@@ -1,39 +1,30 @@
 
 function Enemy(positions) {
-  // console.log(mouseX)
-  this.canvas = CANVAS;
-  this.context = this.canvas.getContext('2d');
   this.position = { x: positions.x, y: positions.y };
   this.radius = Math.random() * 2 + 4;
-  this.speed = Math.random() + 1;
+  this.speed = (Math.random() + 1) * (level * .4); // SET SPEED BY LEVEL
   this.fillColor = 'red';
   this.create = function () {
 
-    //ENEMIES MOVE(FIRST:CLEAR CANVAS)
-    // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    //SPEED
-    if (score < 10000) {
-      this.speed = this.speed + parseFloat("0.00" + score)
-    }
-     
-    // APPLY POSITION
+    // APPLY POSITION BY LEVEL
       this.position.x -= this.speed;
-      this.position.y += this.speed;
+    this.position.y += this.speed;
 
     // RESET POSITION WHEN CANVAS END
     if (this.position.x < -10) {
-      this.position.x = this.canvas.width + 10 + Math.random() * 30;
+      this.position.x = canvas.width + 10 + Math.random() * 30;
+      this.speed = (Math.random() + 1) * (level * .4); //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
     }
-    if (this.position.y > this.canvas.height + 10) {
+    if (this.position.y > CANVAS.height + 10) {
       this.position.y = -10 + Math.random() * -30;
+      this.speed = (Math.random() + 1) * (level * .4); //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
     }
 
     //ENEMIES BODY
-    this.context.beginPath();
-    this.context.fillStyle = this.fillColor;
+    context.beginPath();
+    context.fillStyle = this.fillColor;
     // console.log(this.position.x)
-    this.context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
-    this.context.fill();
+    context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
+    context.fill();
   };
 }

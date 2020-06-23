@@ -1,7 +1,5 @@
 
 function Particle(position, enemyRad) {
-  this.canvas = CANVAS;
-  this.context = this.canvas.getContext('2d');
   this.r = (a, b, c) => parseFloat((Math.random() * ((a ? a : 1) - (b ? b : 0)) + (b ? b : 0)).toFixed(c ? c : 0));
   this.position = { x: position.x, y: position.y };
   this.radius = .1;
@@ -31,10 +29,10 @@ function Particle(position, enemyRad) {
       // console.log("hi");
     } else {
     //PARTICLES BODY
-      this.context.beginPath();
-      this.context.fillStyle = this.fillColor;
-      this.context.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI, false);
-      this.context.fill();
+      context.beginPath();
+      context.fillStyle = this.fillColor;
+      context.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI, false);
+      context.fill();
     }
   };
 };

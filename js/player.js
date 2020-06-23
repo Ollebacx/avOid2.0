@@ -1,11 +1,10 @@
 
 function Player() {
   // console.log(mouseX)
-  this.canvas = CANVAS;
-  this.context = this.canvas.getContext('2d')
-  this.position = { x: -10, y: this.canvas.height + 10 };
-  this.shift = { x: -10, y: this.canvas.height + 10 };
+  this.position = { x: -10, y: CANVAS.height + 10 };
+  this.shift = { x: -10, y: CANVAS.height + 10 };
   this.radius = 5;
+  this.distCollision = this.radius - 2;
   this.shieldRadius = 15;
   this.speed = 0.08;
   this.fillColor = '#FFF';
@@ -29,31 +28,31 @@ function Player() {
     }
 
     //PLAYER BODY
-    this.context.beginPath();
-    this.context.fillStyle = this.fillColor;
-    this.context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
-    this.context.fill();
+    context.beginPath();
+    context.fillStyle = this.fillColor;
+    context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
+    context.fill();
 
     //PLAYER TRAIL
     let history = this.positions, prevPot, nextPot;
-    this.context.beginPath();
-    this.context.lineWidth = 2;
-    this.context.lineCap = 'round';
-    this.context.strokeStyle = this.fillColor;
+    context.beginPath();
+    context.lineWidth = 2;
+    context.lineCap = 'round';
+    context.strokeStyle = this.fillColor;
 
     for (let i = 0; i < history.length - 1; i++) {
       prevPot = history[i];
       nextPot = history[i + 1];
       if (i === 0) {
-        this.context.moveTo(prevPot.x, prevPot.y);
+        context.moveTo(prevPot.x, prevPot.y);
       } else {
-        this.context.lineTo(nextPot.x, nextPot.y);
+        context.lineTo(nextPot.x, nextPot.y);
       }
       //DIAGONAL TRAIL POSITION
       prevPot.x -= this.speed * 10;
       prevPot.y += this.speed * 10;
     }
-    this.context.stroke();
+    context.stroke();
 
     //HISTORY REGISTER
     this.positions.push({
@@ -68,11 +67,11 @@ function Player() {
 
     // PLAYER LIFES
     for (let j = 1; j <= this.lifeCount; j++) {
-      this.context.beginPath();
-      this.context.fillStyle = this.fillColor;
+      context.beginPath();
+      context.fillStyle = this.fillColor;
       if (this.positions[this.lifePos - 18 * j] && this.positions[this.lifePos - 18 * j]) {
-        this.context.arc(this.positions[this.lifePos - 18 * j].x, this.positions[this.lifePos - 18 * j].y, 3, 0, Math.PI * 2, true);
-        this.context.fill();
+        context.arc(this.positions[this.lifePos - 18 * j].x, this.positions[this.lifePos - 18 * j].y, 3, 0, Math.PI * 2, true);
+        context.fill();
       }
     }
   };
@@ -87,10 +86,10 @@ function Player() {
     this.position.y = this.shift.y;
 
     //SHIELD BODY
-    this.context.beginPath();
-    this.context.fillStyle = '#00B2FF';
-    this.context.arc(this.position.x, this.position.y, this.shieldRadius, 0, Math.PI * 2, true);
-    this.context.fill();
+    context.beginPath();
+    context.fillStyle = '#00B2FF';
+    context.arc(this.position.x, this.position.y, this.shieldRadius, 0, Math.PI * 2, true);
+    context.fill();
   };
   this.rainbow = function () {
     this.rainbowColor = '#';
@@ -101,17 +100,17 @@ function Player() {
     this.fillColor = this.rainbowColor;
   };
   this.darkness = function () {
-    this.context.fillStyle = '#0F0F0F';
-    this.context.strokeStyle = '#0F0F0F';
-    this.context.lineWidth = 50;
+    context.fillStyle = '#0F0F0F';
+    context.strokeStyle = '#0F0F0F';
+    context.lineWidth = 50;
     //LINEA CIRCUNFERENCIA
-    this.context.beginPath();
-    this.context.arc(this.position.x, this.position.y, 120, 0, Math.PI * 2, true);
-    this.context.stroke();
+    context.beginPath();
+    context.arc(this.position.x, this.position.y, 120, 0, Math.PI * 2, true);
+    context.stroke();
     //RECTANGULOS DESDE LOS EXTREMOS
-    this.context.fillRect(0, 0, this.position.x - 100, this.canvas.height);
-    this.context.fillRect(this.position.x + 100, 0, this.canvas.width, this.canvas.height);
-    this.context.fillRect(0, 0, this.canvas.width, this.position.y - 100);
-    this.context.fillRect(0, this.position.y + 100, this.canvas.width, this.canvas.height);
+    context.fillRect(0, 0, this.position.x - 100, CANVAS.height);
+    context.fillRect(this.position.x + 100, 0, CANVAS.width, CANVAS.height);
+    context.fillRect(0, 0, CANVAS.width, this.position.y - 100);
+    context.fillRect(0, this.position.y + 100, CANVAS.width, CANVAS.height);
   }
 }

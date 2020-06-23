@@ -58,7 +58,6 @@ function loadGame() {
 
   //PLAYER
   this.player = new Player();
-  this.player.distCollision = this.player.radius - 2;
 
   //ENEMIES QUANTITY
   for (let i = 0; i < enemiesQty; i++) {
@@ -86,11 +85,11 @@ function animation() {
     }
 
     //ERASE CANVAS
-    context.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);
+    context.clearRect(0, 0, CANVAS.width, CANVAS.height);
 
     //BACKGROUND BOOST
-    for (let b = 0; b < this.boost.length - 1; b++) {
-      this.boost[b].create();
+    for (let b = 0; b < boost.length - 1; b++) {
+      boost[b].create();
       //CHECK BOOST COLLISION PLAYING
       if (PLAYING) {
         boostCollision(b);
@@ -112,23 +111,23 @@ function animation() {
       //SCORE COUNTS
       score++;
       //LEVEL COUNT
-      if (score > 0 && score < 1000) {
+      if (score > 0 && score < 2000) {
         level = 1
-      } else if (score > 1000 && score < 2000) {
+      } else if (score > 2000 && score < 4000) {
         level = 2
-      } else if (score > 2000 && score < 3000) {
+      } else if (score > 4000 && score < 6000) {
         level = 3
-      } else if (score > 3000 && score < 4000) {
+      } else if (score > 6000 && score < 8000) {
         level = 4
-      } else if (score > 4000 && score < 5000) {
+      } else if (score > 8000 && score < 10000) {
         level = 5
-      } else if (score > 5000 && score < 6000) {
+      } else if (score > 10000 && score < 12000) {
         level = 6
-      } else if (score > 6000 && score < 7000) {
+      } else if (score > 12000 && score < 14000) {
         level = 7
-      } else if (score > 7000 && score < 8000) {
+      } else if (score > 14000 && score < 16000) {
         level = 8
-      } else if (score > 8000 && score < 9000) {
+      } else if (score > 16000 && score < 18000) {
         level = 9
       } else {
         level = 10
@@ -236,6 +235,7 @@ function boostCollision(b) {
 
     //SHIELD
     if (this.boost[b].fillColor === '#00B2FF') {
+      clearTimeout(rainbowTimer);
       clearTimeout(shieldTimer);
       //MAKE PLAYER INVENCIBLE, ACTIVATE SHIELD & BIGGER RADIUS
       this.player.invencible = true;
@@ -249,6 +249,7 @@ function boostCollision(b) {
       }, 5000);
       //RAINBOW
     } else if (this.boost[b].fillColor === 'yellow') {
+      clearTimeout(shieldTimer);
       clearTimeout(rainbowTimer);
       this.player.invencible = true;
       RAINBOW = true;
@@ -336,6 +337,7 @@ function applyRandomColor() {
 }
 
 document.addEventListener('keydown', (event) => {
+  console.log(event)
   if (event.key === 'q') {
     this.player.lifeCount = 3;
   }
@@ -348,11 +350,9 @@ document.addEventListener('keydown', (event) => {
     }
     this.player.invencible = !this.player.invencible;
   }
-  if (event.key === 'e') {
+  if (event.code === 'Space') {
     if (PLAYING) {
       pauseGame();
     }
   }
-  // const keyName = event.key;
-  // alert('keydown event\n\n' + 'key: ' + keyName);
 });
