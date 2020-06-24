@@ -13,14 +13,15 @@ var PLAYING = false;
 var LEVELCHANGE = false;
 var PAUSE = false;
 
+var level = 1;
+var unlocked = parseInt(localStorage.getItem("unlocked")) || 1;
+
 var enemies = [];
 var enemiesQty = 80;
 
 var boost = [];
 var boostQty = 3;
 
-var DRAWSCORE = false;
-var drawsScoreTimer;
 var SHIELD = false;
 var shieldTimer;
 
@@ -34,12 +35,13 @@ var darknessTimer;
 var particles = [];
 var particlesQty = 20;
 
+var DRAWSCORE = false;
+var drawsScoreTimer;
+
 var score = 0;
 var scoreBase = 50;
 var scoreMultiply = 1;
 var scoreSum = 0;
-var level = 1;
-var fps = 0;
 
 // if (SCREEN_WIDTH < 800) {
 //   enemiesQty = 100
@@ -144,7 +146,6 @@ function animation() {
         }
       }
     }
-
     if (DARK) {
       this.player.darkness();
     }
@@ -158,9 +159,71 @@ function animation() {
     context.fillText("Level: " + level, 114, 27);
     context.fillText("Score: " + score, 184, 27);
     context.fillText("FPS: 60", this.CANVAS.width - 60, 27);
-
   }
   requestAnimationFrame(animation);
+}
+
+function selectLevel(selected) {
+  var previousL = document.getElementById(level);
+  previousL.classList.remove("selected");
+  var levelSelected = document.getElementById(selected || level);
+  levelSelected.classList.add("selected");
+  level = selected || level;
+  // MODIFY ENEMIES.JS & BOOSTS.JS SPEED ONLIVE
+  if (selected) {
+    LEVELCHANGE = true;
+  }
+  // SAVE NEW MAX LEVEL
+  if (level > unlocked) {
+    unlocked = level;
+    localStorage.setItem("unlocked", unlocked)
+  }
+  // DESACTIVATE/ACTIVATE LEVEL TO PICK
+  for (let i = 1; i < 11; i++){
+    if (i > unlocked) {
+      document.getElementById(i).classList.add('locked');
+      document.getElementById(i).setAttribute('disabled', "");
+    } else {
+      document.getElementById(i).classList.remove('locked');
+      document.getElementById(i).removeAttribute('disabled', "");
+    }
+  }
+}
+
+function startGame() {
+  //RESET ENEMIES
+  enemies = [];
+  enemiesQty = 80;
+  //RESET ENEMIES POSITION
+  for (let i = 0; i < enemiesQty; i++) {
+    const x = Math.random() * (SCREEN_WIDTH * 2);
+    const y = Math.random() * -SCREEN_HEIGHT;
+    this.enemies.push(new Enemy({ x, y }));
+  };
+  //RESET BOOST
+  boost = [];
+  boostQty = 3;
+  //RESET BOOST POSITION
+  for (let i = 0; i < boostQty; i++) {
+    const x = Math.random() * (SCREEN_WIDTH * 2);
+    const y = Math.random() * -SCREEN_HEIGHT;
+    this.boost.push(new Boost({ x, y }));
+  };
+  if (!panel.classList[0]) { //START GAME
+    //RESET PLAYER
+    this.player.lifeCount = 2;
+    this.player.position = { x: -10, y: this.canvas.height + 10 };
+    this.player.shift = { x: -10, y: this.canvas.height + 10 };
+    this.player.positions = [];
+
+    panel.classList.add("desactivate");
+    document.getElementById(level).classList.remove("selected")
+    score = 0;
+    PLAYING = true;
+  } else { //LOAD PREGAME
+    panel.classList.remove("desactivate");
+    PLAYING = false;
+  }
 }
 
 function enemyCollision(j) {
@@ -168,10 +231,10 @@ function enemyCollision(j) {
     this.player.position.y - this.player.distCollision < this.enemies[j].position.y + this.enemies[j].radius &&
     this.player.position.x + this.player.distCollision > this.enemies[j].position.x - this.enemies[j].radius &&
     this.player.position.y + this.player.distCollision > this.enemies[j].position.y - this.enemies[j].radius) {
-    if (!this.player.invencibleDmg && !this.player.invencible) {
-      //LIFE -1
-      this.player.lifeCount--
-      DARK = false;
+      if (!this.player.invencibleDmg && !this.player.invencible) {
+        //LIFE -1
+        this.player.lifeCount--
+        DARK = false;
       //DAMAGE BLINK
       var OFF = setInterval(function () { this.player.fillColor = '#111'; }, 10);
       var ON = setInterval(function () { this.player.fillColor = '#FFF'; }, 20);
@@ -269,52 +332,6 @@ function boostCollision(b) {
     const x = Math.random() * (SCREEN_WIDTH * 2);
     const y = Math.random() * -SCREEN_HEIGHT;
     this.boost.push(new Boost({ x, y }));
-  }
-}
-
-function selectLevel(userLevel) {
-  var previousL = document.getElementById(level);
-  previousL.classList.remove("selected");
-  var levelSelected = document.getElementById(userLevel || level);
-  levelSelected.classList.add("selected");
-  level = userLevel || level;
-  if (userLevel) {
-    LEVELCHANGE = true;
-  }
-}
-function startGame() {
-  //RESET ENEMIES
-  enemies = [];
-  enemiesQty = 80;
-  //RESET ENEMIES POSITION
-  for (let i = 0; i < enemiesQty; i++) {
-    const x = Math.random() * (SCREEN_WIDTH * 2);
-    const y = Math.random() * -SCREEN_HEIGHT;
-    this.enemies.push(new Enemy({ x, y }));
-  };
-  //RESET BOOST
-  boost = [];
-  boostQty = 3;
-  //RESET BOOST POSITION
-  for (let i = 0; i < boostQty; i++) {
-    const x = Math.random() * (SCREEN_WIDTH * 2);
-    const y = Math.random() * -SCREEN_HEIGHT;
-    this.boost.push(new Boost({ x, y }));
-  };
-  if (!panel.classList[0]) { //START GAME
-    //RESET PLAYER
-    this.player.lifeCount = 2;
-    this.player.position = { x: -10, y: this.canvas.height + 10 };
-    this.player.shift = { x: -10, y: this.canvas.height + 10 };
-    this.player.positions = [];
-
-    panel.classList.add("desactivate");
-    document.getElementById(level).classList.remove("selected")
-    score = 0;
-    PLAYING = true;
-  } else { //LOAD PREGAME
-    panel.classList.remove("desactivate");
-    PLAYING = false;
   }
 }
 
