@@ -24,6 +24,13 @@ body {
     top: 50%;
     transform: translate(-50%, -50%);
 }
+.text {
+  font-size: 7vh;
+      position: absolute;
+    left: 50%;
+    top: 10%;
+    transform: translate(-50%, -50%);
+}
 .wrapLevel{
   width: 80%;
   z-index: 10;
