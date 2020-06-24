@@ -2,14 +2,14 @@
 function Player() {
   this.position = { x: -10, y: CANVAS.height + 10 };
   this.shift = { x: -10, y: CANVAS.height + 10 };
-  this.radius = 5;
+  this.radius = 4;
   this.distCollision = this.radius - 2;
   this.shieldRadius = 15;
-  this.speed = 0.08;
+  this.speed = 0.2;
   this.fillColor = '#FFF';
   this.positions = [];
-  this.maxPositions = 80;
-  this.lifePos = 75;
+  this.maxPositions = 70;
+  this.lifePos = 70;
   this.lifeCount = 2;
   this.invencible = false;
   this.invencibleDmg = false;
@@ -48,8 +48,8 @@ function Player() {
         context.lineTo(nextPot.x, nextPot.y);
       }
       //DIAGONAL TRAIL POSITION
-      prevPot.x -= this.speed * 10;
-      prevPot.y += this.speed * 10;
+      prevPot.x -= this.speed * 5;
+      prevPot.y += this.speed * 5;
     }
     context.stroke();
 
@@ -68,8 +68,8 @@ function Player() {
     for (let j = 1; j <= this.lifeCount; j++) {
       context.beginPath();
       context.fillStyle = this.fillColor;
-      if (this.positions[this.lifePos - 18 * j] && this.positions[this.lifePos - 18 * j]) {
-        context.arc(this.positions[this.lifePos - 18 * j].x, this.positions[this.lifePos - 18 * j].y, 3, 0, Math.PI * 2, true);
+      if (this.positions[this.lifePos - 14 * j] && this.positions[this.lifePos - 14 * j]) {
+        context.arc(this.positions[this.lifePos - 14 * j].x, this.positions[this.lifePos - 14 * j].y, 3, 0, Math.PI * 2, true);
         context.fill();
       }
     }
