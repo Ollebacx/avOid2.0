@@ -6,7 +6,7 @@ function Boost(bPositions) {
   if (level > 5) {
     this.arrColors = ['#00B2FF', 'yellow', '#0F0F0F', 'green'];
   } else {
-    this.arrColors = ['#00B2FF', 'yellow', '#0F0F0F', 'green']; //'purple', 'orange', 'green'];
+    this.arrColors = ['#00B2FF', 'yellow', '#0F0F0F']; //'purple', 'orange', 'green'];
   }
   this.fillColor = this.arrColors[Math.floor(Math.random() * this.arrColors.length)]; //'#00B2FF'
   this.create = function () {
