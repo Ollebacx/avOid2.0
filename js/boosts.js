@@ -1,8 +1,13 @@
 function Boost(bPositions) {
-  this.arrColors = ['#00B2FF', 'yellow', '#0F0F0F']; //'purple', 'orange', 'green'];
+  //ADD LIFE BOOST AFTER LEVEL 5
   this.position = { x: bPositions.x, y: bPositions.y };
   this.radius = 10;
   this.speed = (Math.random() + 1) * (level * .4); // SET SPEED BY LEVEL
+  if (level > 5) {
+    this.arrColors = ['#00B2FF', 'yellow', '#0F0F0F', 'green'];
+  } else {
+    this.arrColors = ['#00B2FF', 'yellow', '#0F0F0F', 'green']; //'purple', 'orange', 'green'];
+  }
   this.fillColor = this.arrColors[Math.floor(Math.random() * this.arrColors.length)]; //'#00B2FF'
   this.create = function () {
 
@@ -60,6 +65,16 @@ function Boost(bPositions) {
       context.fillStyle = this.fillColor;
       context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
       context.fill()
+    }
+    //LIFE UP
+    else if (this.fillColor === 'green') {
+      context.beginPath();
+      context.fillStyle = this.fillColor;
+      context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
+      context.fill()
+      context.fillStyle = "rgba(255,255,255, 1)";
+      context.font = "10px Quicksand";
+      context.fillText("Up", this.position.x - 6, this.position.y + 3);
     }
   }
 }

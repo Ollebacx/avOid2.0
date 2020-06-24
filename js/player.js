@@ -1,6 +1,5 @@
 
 function Player() {
-  // console.log(mouseX)
   this.position = { x: -10, y: CANVAS.height + 10 };
   this.shift = { x: -10, y: CANVAS.height + 10 };
   this.radius = 5;

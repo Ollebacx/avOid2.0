@@ -118,7 +118,7 @@ function animation() {
       //SCORE COUNTS
       score++;
       //LEVEL INCREASE EACH 1200 POINTS
-      if (level < 11 && score % 1200 === 0) {
+      if (level < 10 && score % 1200 === 0) {
         level++
       }
       //FINISH GAME
@@ -145,9 +145,10 @@ function animation() {
           this.particles[k].create();
         }
       }
-    }
-    if (DARK) {
-      this.player.darkness();
+      //CREATE DARK OVER ENEMIES
+      if (DARK) {
+        this.player.darkness();
+      }
     }
     //GAME PANEL (LEVEL & SCORE)
     context.fillStyle = "rgba(0,0,0, 0.8)";
@@ -324,7 +325,9 @@ function boostCollision(b) {
       darknessTimer = setTimeout(() => {
         DARK = false;
       }, 8000)
-    };
+    } else if (this.boost[b].fillColor === 'green') {
+      this.player.lifeCount++;
+    }
 
     //DELETE THAT BOOST
     this.boost.splice(b, 1)
