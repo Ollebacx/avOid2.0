@@ -208,7 +208,7 @@ function startGame() {
   for (let i = 0; i < boostQty; i++) {
     const x = Math.random() * (SCREEN_WIDTH * 2);
     const y = Math.random() * -SCREEN_HEIGHT;
-    this.boost.push(new Boost({ x, y }));
+    this.boost.push(new Boost({ x, y }, this.player.lifeCount));
   };
   if (!panel.classList[0]) { //START GAME
     //RESET PLAYER
@@ -325,7 +325,7 @@ function boostCollision(b) {
       darknessTimer = setTimeout(() => {
         DARK = false;
       }, 8000)
-    } else if (this.boost[b].fillColor === 'green') {
+    } else if (this.boost[b].fillColor === 'green' && this.player.lifeCount < 3) {
       this.player.lifeCount++;
     }
 
@@ -334,7 +334,7 @@ function boostCollision(b) {
     //CREATE NEW BOOST
     const x = Math.random() * (SCREEN_WIDTH * 2);
     const y = Math.random() * -SCREEN_HEIGHT;
-    this.boost.push(new Boost({ x, y }));
+    this.boost.push(new Boost({ x, y }, this.player.lifeCount));
   }
 }
 

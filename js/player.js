@@ -10,7 +10,7 @@ function Player() {
   this.positions = [];
   this.maxPositions = 80;
   this.lifePos = 75;
-  this.lifeCount = 3;
+  this.lifeCount = 2;
   this.invencible = false;
   this.invencibleDmg = false;
   this.create = function () {

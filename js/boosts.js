@@ -1,9 +1,9 @@
-function Boost(bPositions) {
+function Boost(bPositions, life) {
   //ADD LIFE BOOST AFTER LEVEL 5
   this.position = { x: bPositions.x, y: bPositions.y };
   this.radius = 10;
   this.speed = (Math.random() + 1) * (level * .4); // SET SPEED BY LEVEL
-  if (level > 5) {
+  if (level > 5 && life < 3) {
     this.arrColors = ['#00B2FF', 'yellow', '#0F0F0F', 'green'];
   } else {
     this.arrColors = ['#00B2FF', 'yellow', '#0F0F0F']; //'purple', 'orange', 'green'];
