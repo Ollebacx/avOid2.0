@@ -35,8 +35,8 @@ var darknessTimer;
 var SLOWTIME = false;
 var slowerTimer;
 
-var REDUCE = false;
-var reduceTimer;
+var SMALLER = false;
+var smallerTimer;
 
 var particles = [];
 var particlesQty = 20;
@@ -342,7 +342,14 @@ function boostCollision(b) {
       }, 100)
       // REDUCE ENEMIES SIZE
     } else if (this.boost[b].fillColor === 'pink') {
-
+      clearInterval(smallerTimer);
+      let n = 4;
+      smallerTimer = setInterval(() => {
+        this.enemies.forEach(enemy => enemy.reduceSize(n));
+        if (n > 1) {
+          n -= 0.05
+        }
+      }, 100)
     }
 
     //DELETE THAT BOOST

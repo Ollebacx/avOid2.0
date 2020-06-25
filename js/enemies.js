@@ -2,6 +2,7 @@
 function Enemy(positions) {
   this.position = { x: positions.x, y: positions.y };
   this.radius = Math.random() * 2 + 4;
+  this.variableSize = this.radius;
   this.speed = (Math.random() + 1);
   this.variableSpeed = this.speed * level * .4;
   this.fillColor = 'red';
@@ -36,7 +37,7 @@ function Enemy(positions) {
     context.beginPath();
     context.fillStyle = this.fillColor;
     // console.log(this.position.x)
-    context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
+    context.arc(this.position.x, this.position.y, this.variableSize, 0, Math.PI * 2, true);
     context.fill();
   };
   // SLOW BOOST
@@ -46,6 +47,13 @@ function Enemy(positions) {
     if (n < 1) {
       clearInterval(slowerTimer);
       SLOWTIME = false;
+    }
+  };
+  this.reduceSize = function (n) {
+    this.variableSize = this.radius / n;
+    if (n < 1) {
+      clearInterval(smallerTimer);
+      SMALLER = false;
     }
   }
 }
