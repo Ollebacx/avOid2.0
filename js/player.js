@@ -84,12 +84,6 @@ function Player() {
     // APPLY POSITION
     this.position.x = this.shift.x;
     this.position.y = this.shift.y;
-    //
-    setTimeout(() => {
-      if (this.shieldRadius > this.radius) {
-        this.shieldRadius -= 0.05;
-      }
-    }, 3000)
 
     //SHIELD BODY
     context.beginPath();

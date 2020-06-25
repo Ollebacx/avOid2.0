@@ -24,8 +24,10 @@ var boostQty = 3;
 
 var SHIELD = false;
 var shieldTimer;
-var shieldBlack;
-var shieldBlue
+var blinkShieldTimer;
+var reduceShieldInterval;
+var shieldBlackInterval;
+var shieldBlueInterval;
 
 var STAR = document.getElementById('source');
 var RAINBOW = false;
@@ -295,29 +297,36 @@ function boostCollision(b) {
       // IF HAD RAINBOW
       clearTimeout(rainbowTimer);
       this.player.fillColor = '#FFF';
-
+      //RESET ALL TIMERS AT BEGINNING
       clearTimeout(shieldTimer);
+      clearTimeout(blinkShieldTimer);
+      clearInterval(shieldBlackInterval);
+      clearInterval(shieldBlueInterval);
+      clearInterval(reduceShieldInterval);
       //MAKE PLAYER INVENCIBLE, ACTIVATE SHIELD & BIGGER RADIUS
       this.player.shieldRadius = 15;
       this.player.shieldColor = '#00B2FF';
-      setTimeout(() => {
-        shieldBlack = setInterval(function () {
-         console.log('object');
-          this.player.shieldColor = '#111';
-        }, 50);
-        shieldBlue = setInterval(function () { this.player.shieldColor = '#00B2FF' }, 100);
+      //REDUCE SHIELD SIZE
+      blinkShieldTimer = setTimeout(() => {
+        reduceShieldInterval = setInterval(function () {
+          if (this.player.shieldRadius > this.player.radius)
+            this.player.shieldRadius -= 0.05;
+        }, 10);
+        //BLINK SHIELD WHILE DECREASING
+        shieldBlackInterval = setInterval(function () { this.player.shieldColor = '#111'; }, 50);
+        shieldBlueInterval = setInterval(function () { this.player.shieldColor = '#00B2FF' }, 100);
+        //CLEAR TIMERS
         setTimeout(() => {
-          clearInterval(shieldBlack);
-          clearInterval(shieldBlue);
-        }, 5000)
-      }, 3050)
+          clearInterval(shieldBlackInterval);
+          clearInterval(shieldBlueInterval);
+          clearInterval(reduceShieldInterval);
+        }, 1950)
+      }, 3050);
       this.player.invencible = true;
       SHIELD = true;
       this.player.distCollision = this.player.shieldRadius - 2;
       //END INVENCIBLE, SHIELD & SMALLER RADIUS
       shieldTimer = setTimeout(() => {
-        clearInterval(shieldBlack);
-        clearInterval(shieldBlue);
         this.player.invencible = false;
         SHIELD = false;
         this.player.distCollision = this.player.radius - 2
