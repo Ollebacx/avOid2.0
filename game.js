@@ -17,7 +17,7 @@ var level = 1;
 var unlocked = parseInt(localStorage.getItem("unlocked")) || 1;
 
 var enemies = [];
-var enemiesQty = 80;
+var enemiesQty = 100;
 
 var boost = [];
 var boostQty = 3;
@@ -31,6 +31,11 @@ var rainbowTimer;
 
 var DARK = false;
 var darknessTimer;
+
+var SLOWTIME = false;
+
+var REDUCE = false;
+var reduceTimer;
 
 var particles = [];
 var particlesQty = 20;
@@ -154,12 +159,9 @@ function animation() {
     context.fillStyle = "rgba(0,0,0, 0.8)";
     context.fillRect(0, 0, this.CANVAS.width, 40);
     context.fillStyle = "rgba(255,255,255, 1)";
-    context.font = "20px Quicksand";
-    context.fillText("avOid", 20, 27);
     context.font = "14px Quicksand";
-    context.fillText("Level: " + level, 114, 27);
-    context.fillText("Score: " + score, 184, 27);
-    context.fillText("FPS: 60", this.CANVAS.width - 60, 27);
+    context.fillText("Level: " + level, 20, 25);
+    context.fillText("Score: " + score, 90, 25);
   }
   requestAnimationFrame(animation);
 }
@@ -180,7 +182,7 @@ function selectLevel(selected) {
     localStorage.setItem("unlocked", unlocked)
   }
   // DESACTIVATE/ACTIVATE LEVEL TO PICK
-  for (let i = 1; i < 11; i++){
+  for (let i = 1; i < 11; i++) {
     if (i > unlocked) {
       document.getElementById(i).classList.add('locked');
       document.getElementById(i).setAttribute('disabled', "");
@@ -194,7 +196,7 @@ function selectLevel(selected) {
 function startGame() {
   //RESET ENEMIES
   enemies = [];
-  enemiesQty = 80;
+  enemiesQty = 100;
   //RESET ENEMIES POSITION
   for (let i = 0; i < enemiesQty; i++) {
     const x = Math.random() * (SCREEN_WIDTH * 2);
@@ -232,10 +234,10 @@ function enemyCollision(j) {
     this.player.position.y - this.player.distCollision < this.enemies[j].position.y + this.enemies[j].radius &&
     this.player.position.x + this.player.distCollision > this.enemies[j].position.x - this.enemies[j].radius &&
     this.player.position.y + this.player.distCollision > this.enemies[j].position.y - this.enemies[j].radius) {
-      if (!this.player.invencibleDmg && !this.player.invencible) {
-        //LIFE -1
-        this.player.lifeCount--
-        DARK = false;
+    if (!this.player.invencibleDmg && !this.player.invencible) {
+      //LIFE -1
+      this.player.lifeCount--
+      DARK = false;
       //DAMAGE BLINK
       var OFF = setInterval(function () { this.player.fillColor = '#111'; }, 10);
       var ON = setInterval(function () { this.player.fillColor = '#FFF'; }, 20);
@@ -325,8 +327,19 @@ function boostCollision(b) {
       darknessTimer = setTimeout(() => {
         DARK = false;
       }, 8000)
+      //LIFE UP
     } else if (this.boost[b].fillColor === 'green' && this.player.lifeCount < 3) {
       this.player.lifeCount++;
+      //SLOW ENEMIES
+    } else if (this.boost[b].fillColor === 'orange') {
+      enemies.forEach(enemy => {
+        let speed = enemy.speed;
+        enemy.speed /= 8;
+        setTimeout(() => enemy.speed = speed, 5000)
+      })
+      // REDUCE ENEMIES SIZE
+    } else if (this.boost[b].fillColor === 'pink') {
+
     }
 
     //DELETE THAT BOOST
@@ -365,7 +378,6 @@ function applyRandomColor() {
 }
 
 document.addEventListener('keydown', (event) => {
-  console.log(event)
   if (event.key === 'q') {
     this.player.lifeCount = 3;
   }

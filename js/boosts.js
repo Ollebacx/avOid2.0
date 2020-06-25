@@ -4,9 +4,9 @@ function Boost(bPositions, life) {
   this.radius = 10;
   this.speed = (Math.random() + 1) * (level * .4); // SET SPEED BY LEVEL
   if (level > 5 && life < 3) {
-    this.arrColors = ['#00B2FF', 'yellow', '#0F0F0F', 'green'];
+    this.arrColors = ['#00B2FF', 'yellow', '#0F0F0F', 'orange', 'pink', 'green'];
   } else {
-    this.arrColors = ['#00B2FF', 'yellow', '#0F0F0F']; //'purple', 'orange', 'green'];
+    this.arrColors = ['#00B2FF', 'yellow', '#0F0F0F', 'orange', 'pink']; //'purple'];
   }
   this.fillColor = this.arrColors[Math.floor(Math.random() * this.arrColors.length)]; //'#00B2FF'
   this.create = function () {
@@ -75,6 +75,26 @@ function Boost(bPositions, life) {
       context.fillStyle = "rgba(255,255,255, 1)";
       context.font = "10px Quicksand";
       context.fillText("Up", this.position.x - 6, this.position.y + 3);
+    }
+    //SLOW ENEMIES
+    else if (this.fillColor === 'orange') {
+      context.beginPath();
+      context.fillStyle = this.fillColor;
+      context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
+      context.fill()
+      context.fillStyle = "rgba(255,255,255, 1)";
+      context.font = "15px Quicksand";
+      context.fillText("T", this.position.x - 5, this.position.y + 6);
+    }
+    //REDUCE ENEMIES
+    else if (this.fillColor === 'pink') {
+      context.beginPath();
+      context.fillStyle = this.fillColor;
+      context.arc(this.position.x, this.position.y, this.radius * 0.8, 0, Math.PI * 2, true);
+      context.fill()
+      context.fillStyle = "black";
+      context.font = "10px Quicksand";
+      context.fillText("R", this.position.x - 3.5, this.position.y + 3);
     }
   }
 }
