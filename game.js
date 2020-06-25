@@ -33,6 +33,7 @@ var DARK = false;
 var darknessTimer;
 
 var SLOWTIME = false;
+var slowerTimer;
 
 var REDUCE = false;
 var reduceTimer;
@@ -332,11 +333,13 @@ function boostCollision(b) {
       this.player.lifeCount++;
       //SLOW ENEMIES
     } else if (this.boost[b].fillColor === 'orange') {
-      enemies.forEach(enemy => {
-        let speed = enemy.speed;
-        enemy.speed /= 8;
-        setTimeout(() => enemy.speed = speed, 5000)
-      })
+      clearInterval(slowerTimer);
+      SLOWTIME = true;
+      let n = 8;
+      slowerTimer = setInterval(() => {
+        this.enemies.forEach(enemy => enemy.reduceSpeed(n));
+        if (n > 1) { n -= 0.1 }
+      }, 100)
       // REDUCE ENEMIES SIZE
     } else if (this.boost[b].fillColor === 'pink') {
 
