@@ -1,7 +1,7 @@
 
 function Enemy(positions) {
   this.position = { x: positions.x, y: positions.y };
-  this.radius = Math.random() * 2 + 4;
+  this.radius = Math.random() * 2 + 3.5;
   this.variableSize = this.radius;
   this.speed = (Math.random() + .1);
   this.variableSpeed = this.speed + level/2 ;
