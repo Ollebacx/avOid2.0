@@ -7,6 +7,7 @@ function Player() {
   this.shieldRadius = 15;
   this.speed = 0.2;
   this.fillColor = '#FFF';
+  this.shieldColor = '#00B2FF';
   this.positions = [];
   this.maxPositions = 70;
   this.lifePos = 70;
@@ -83,10 +84,16 @@ function Player() {
     // APPLY POSITION
     this.position.x = this.shift.x;
     this.position.y = this.shift.y;
+    //
+    setTimeout(() => {
+      if (this.shieldRadius > this.radius) {
+        this.shieldRadius -= 0.05;
+      }
+    }, 3000)
 
     //SHIELD BODY
     context.beginPath();
-    context.fillStyle = '#00B2FF';
+    context.fillStyle = this.shieldColor;
     context.arc(this.position.x, this.position.y, this.shieldRadius, 0, Math.PI * 2, true);
     context.fill();
   };

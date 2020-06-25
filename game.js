@@ -24,6 +24,8 @@ var boostQty = 3;
 
 var SHIELD = false;
 var shieldTimer;
+var shieldBlack;
+var shieldBlue
 
 var STAR = document.getElementById('source');
 var RAINBOW = false;
@@ -296,11 +298,26 @@ function boostCollision(b) {
 
       clearTimeout(shieldTimer);
       //MAKE PLAYER INVENCIBLE, ACTIVATE SHIELD & BIGGER RADIUS
+      this.player.shieldRadius = 15;
+      this.player.shieldColor = '#00B2FF';
+      setTimeout(() => {
+        shieldBlack = setInterval(function () {
+         console.log('object');
+          this.player.shieldColor = '#111';
+        }, 50);
+        shieldBlue = setInterval(function () { this.player.shieldColor = '#00B2FF' }, 100);
+        setTimeout(() => {
+          clearInterval(shieldBlack);
+          clearInterval(shieldBlue);
+        }, 5000)
+      }, 3050)
       this.player.invencible = true;
       SHIELD = true;
       this.player.distCollision = this.player.shieldRadius - 2;
       //END INVENCIBLE, SHIELD & SMALLER RADIUS
       shieldTimer = setTimeout(() => {
+        clearInterval(shieldBlack);
+        clearInterval(shieldBlue);
         this.player.invencible = false;
         SHIELD = false;
         this.player.distCollision = this.player.radius - 2
