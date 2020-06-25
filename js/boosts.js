@@ -2,7 +2,8 @@ function Boost(bPositions, life) {
   //ADD LIFE BOOST AFTER LEVEL 5
   this.position = { x: bPositions.x, y: bPositions.y };
   this.radius = 10;
-  this.speed = (Math.random() + 1) * (level * .4); // SET SPEED BY LEVEL
+  this.speed = (Math.random() + .1);
+  this.variableSpeed = this.speed + level / 2;
   if (level > 5 && life < 3) {
     this.arrColors = ['#00B2FF', 'yellow', '#0F0F0F', 'orange', 'pink', 'green'];
   } else {
@@ -11,26 +12,28 @@ function Boost(bPositions, life) {
   this.fillColor = this.arrColors[Math.floor(Math.random() * this.arrColors.length)]; //'#00B2FF'
   this.create = function () {
 
+    var speedIncrement = level / 2;
+
     // CHANGE SPEED BY LEVEL ON LIVE BEFORE PLAYING
     if (LEVELCHANGE) {
-      this.speed = (Math.random() + 1) * (level * .4); // SET SPEED BY LEVEL
+      this.variableSpeed = this.speed + speedIncrement; // SET SPEED BY LEVEL
       setTimeout(() => LEVELCHANGE = false, 100)
     }
     // APPLY POSITION BY LEVEL
-    this.position.x -= this.speed;
-    this.position.y += this.speed;
+    this.position.x -= this.variableSpeed;
+    this.position.y += this.variableSpeed;
 
     // RESET POSITION WHEN CANVAS END
     if (this.position.x < -10) {
       this.position.x = CANVAS.width + 10 + Math.random() * 30;
-      if (PLAYING) {
-        this.speed = (Math.random() + 1) * (level * .4); //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
+      if (PLAYING && !SLOWTIME) {
+        this.variableSpeed = this.speed + speedIncrement; //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
       }
     }
     if (this.position.y > CANVAS.height + 10) {
       this.position.y = -10 + Math.random() * -30;
-      if (PLAYING) {
-        this.speed = (Math.random() + 1) * (level * .4); //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
+      if (PLAYING && !SLOWTIME) {
+        this.variableSpeed = this.speed + speedIncrement; //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
       }
     }
 
@@ -95,6 +98,11 @@ function Boost(bPositions, life) {
       context.fillStyle = "black";
       context.font = "10px Quicksand";
       context.fillText("R", this.position.x - 3.5, this.position.y + 3);
-    }
+    };
   }
+  // SLOW BOOST
+  this.reduceSpeed = function (n) {
+    var speedIncrement = level / 2;
+    this.variableSpeed = (this.speed + speedIncrement) / n;
+  };
 }

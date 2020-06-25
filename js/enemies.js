@@ -3,16 +3,16 @@ function Enemy(positions) {
   this.position = { x: positions.x, y: positions.y };
   this.radius = Math.random() * 2 + 4;
   this.variableSize = this.radius;
-  this.speed = (Math.random() + 1);
-  this.variableSpeed = this.speed * level * .4;
+  this.speed = (Math.random() + .1);
+  this.variableSpeed = this.speed + level/2 ;
   this.fillColor = 'red';
   this.create = function () {
 
-    var speedIncrement = level * .4;
+    var speedIncrement = level/2 ;
 
     // CHANGE SPEED BY LEVEL ON LIVE BEFORE PLAYING
     if (LEVELCHANGE) {
-      this.variableSpeed = this.speed * speedIncrement; // SET SPEED BY LEVEL
+      this.variableSpeed = this.speed + speedIncrement; // SET SPEED BY LEVEL
       setTimeout(() => LEVELCHANGE = false, 100)
     }
     // APPLY POSITION BY LEVEL
@@ -23,13 +23,13 @@ function Enemy(positions) {
     if (this.position.x < -10) {
       this.position.x = canvas.width + 10 + Math.random() * 30;
       if (PLAYING && !SLOWTIME) {
-        this.variableSpeed = this.speed * speedIncrement; //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
+        this.variableSpeed = this.speed + speedIncrement; //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
       }
     }
     if (this.position.y > CANVAS.height + 10) {
       this.position.y = -10 + Math.random() * -30;
       if (PLAYING && !SLOWTIME) {
-        this.variableSpeed = this.speed * speedIncrement; //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
+        this.variableSpeed = this.speed + speedIncrement; //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
       }
     }
 
@@ -42,8 +42,8 @@ function Enemy(positions) {
   };
   // SLOW BOOST
   this.reduceSpeed = function (n) {
-    var speedIncrement = level * .4;
-    this.variableSpeed = (this.speed * speedIncrement) / n;
+    var speedIncrement = level/2 ;
+    this.variableSpeed = (this.speed + speedIncrement) / n;
     if (n < 1) {
       clearInterval(slowerTimer);
       SLOWTIME = false;

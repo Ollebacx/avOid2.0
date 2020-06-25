@@ -335,9 +335,10 @@ function boostCollision(b) {
     } else if (this.boost[b].fillColor === 'orange') {
       clearInterval(slowerTimer);
       SLOWTIME = true;
-      let n = 8;
+      let n = 5;
       slowerTimer = setInterval(() => {
         this.enemies.forEach(enemy => enemy.reduceSpeed(n));
+        this.boost.forEach(boost => boost.reduceSpeed(n));
         if (n > 1) { n -= 0.1 }
       }, 100)
       // REDUCE ENEMIES SIZE
