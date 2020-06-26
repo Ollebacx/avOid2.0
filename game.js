@@ -43,6 +43,8 @@ var smallerTimer;
 
 var particles = [];
 var particlesQty = 20;
+var explosions = [];
+var BOOM = false;
 
 var DRAWSCORE = false;
 var drawsScoreTimer;
@@ -106,7 +108,7 @@ function animation() {
     //ERASE CANVAS
     context.clearRect(0, 0, CANVAS.width, CANVAS.height);
 
-    //PLAYER APPEARS WHEN START BTN PRESSED
+    //PLAYER APPEARS WHEN START BTN IS PRESSED
     if (PLAYING) {
       this.player.trail();
       //CREATE SHIELD
@@ -123,7 +125,7 @@ function animation() {
       score++;
       //LEVEL INCREASE EACH 1200 POINTS
       if (level < 10 && score % 1200 === 0) {
-        level++
+        level++;
       }
       //FINISH GAME
       if (this.player.lifeCount === -1) {
@@ -147,17 +149,30 @@ function animation() {
       //CHECK ENEMIES COLLISION PLAYING
       if (PLAYING) {
         enemyCollision(j);
-        if (DRAWSCORE) {
-          this.context.fillStyle = "rgba(255,255,255, 1)";
-          this.context.font = "12px Quicksand";
-          this.context.fillText('+' + scoreSum, this.player.position.x - 15, this.player.position.y - 10)
-        }
-        //PARTICLES EXPLOSION
-        //enemiesExplosion.forEach(enemy => )
-        for (let k = 0; k < this.particles.length - 1; k++) {
-          this.particles[k].create();
-        }
       }
+    }
+    //DRAW POINTS WHEN COLLISION
+    if (DRAWSCORE) {
+      this.context.fillStyle = "rgba(255,255,255, 1)";
+      this.context.font = "12px Quicksand";
+      this.context.fillText('+' + scoreSum, this.player.position.x - 15, this.player.position.y - 10)
+    }
+    //PARTICLES EXPLOSION
+    if (BOOM) {
+      explosions.forEach((enemyParticles, index) => {
+        enemyParticles.forEach((particle, idx) => {
+          particle.create();
+          if (particle.radius < 0.01) {
+            enemyParticles.splice(idx, 1)
+          }
+          if (enemyParticles.length === 0) {
+            explosions.splice(index, 1)
+          }
+        })
+      })
+    }
+    if (explosions.length === 0) {
+      BOOM = false;
     }
     //CREATE DARK OVER ENEMIES
     if (DARK) {
@@ -285,9 +300,11 @@ function enemyCollision(j) {
     //PARTICLES EXPLOSION QUANTITY
     particles = []
     for (let i = 0; i < particlesQty; i++) {
-      particles.push(new Particle(this.enemies[j].position, this.enemies[j].radius));
+      particles.push(new Particle(this.enemies[j].position));
     };
-
+    explosions.push(particles)
+    BOOM = true;
+    console.log(explosions);
     //DELETE THAT ENEMY
     this.enemies.splice(j, 1)
     //CREATE NEW ENEMY
@@ -305,6 +322,7 @@ function boostCollision(b) {
 
     //SHIELD
     if (this.boost[b].fillColor === '#00B2FF') {
+      boostExplosion();
       // IF HAD RAINBOW
       clearTimeout(rainbowTimer);
       this.player.fillColor = '#FFF';
@@ -360,6 +378,7 @@ function boostCollision(b) {
       }, 10000);
       //DARKNESS
     } else if (this.boost[b].fillColor === '#0F0F0F') {
+      boostExplosion();
       clearTimeout(darknessTimer);
       DARK = true;
       darknessTimer = setTimeout(() => {
@@ -370,6 +389,7 @@ function boostCollision(b) {
       this.player.lifeCount++;
       //SLOW ENEMIES
     } else if (this.boost[b].fillColor === 'orange') {
+      boostExplosion();
       clearInterval(slowerTimer);
       SLOWTIME = true;
       let n = 5;
@@ -380,6 +400,7 @@ function boostCollision(b) {
       }, 100)
       // REDUCE ENEMIES SIZE
     } else if (this.boost[b].fillColor === 'pink') {
+      boostExplosion();
       clearInterval(smallerTimer);
       let n = 4;
       smallerTimer = setInterval(() => {
@@ -406,6 +427,10 @@ function pauseGame() {
     context.fillRect(this.CANVAS.width / 2 - 50, this.CANVAS.height / 2 - 90, 30, 90);
     context.fillRect(this.CANVAS.width / 2 + 10, this.CANVAS.height / 2 - 90, 30, 90);
   }
+}
+function boostExplosion() {
+  this.player.distCollision = 100;
+  setTimeout(() => this.player.distCollision = this.player.radius - 2, 100)
 }
 
 

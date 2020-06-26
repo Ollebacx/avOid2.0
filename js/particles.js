@@ -1,14 +1,14 @@
 
-function Particle(position, enemyRad) {
+function Particle(position) {
   this.r = (a, b, c) => parseFloat((Math.random() * ((a ? a : 1) - (b ? b : 0)) + (b ? b : 0)).toFixed(c ? c : 0));
   this.position = { x: position.x, y: position.y };
-  this.radius = .1;
-  this.speed = Math.random() * 0.05;
+  this.radius = 2;
+  this.speed = Math.random() * 5;
   this.rotation = Math.random() * 360;
-  this.friction = 0.9997;
+  this.friction = 0.92;
   this.xVel = 0;
   this.yVel = 0;
-  this.gravity = 1 / 200000;
+  this.gravity = 0.01;
   this.fillColor = 'red';
   this.create = function () {
 
@@ -24,17 +24,10 @@ function Particle(position, enemyRad) {
     this.position.x -= this.xVel;
     this.position.y += this.yVel;
 
-    //STOP DRAWING
-    if (this.radius > 0.05) {
-      //PARTICLES BODY
-      context.beginPath();
-      context.fillStyle = this.fillColor;
-      //enemiesExplosion.forEach(particle => particle.position.x, particle.position.y) ===> [{x:23,y:23}, {x:23,y:23}, {x:23,y:23}]
-      context.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI, false);
-      context.fill();
-    }
-    else {
-      // enemiesExplosion.splice(0,1)
-    }
+    //PARTICLES BODY
+    context.beginPath();
+    context.fillStyle = this.fillColor;
+    context.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI, false);
+    context.fill();
   };
 };
