@@ -133,7 +133,6 @@ function animation() {
       }
       //FINISH GAME
       if (this.player.lifeCount === -1) {
-        endGame();
         startGame();
         selectLevel();
       }
@@ -199,25 +198,25 @@ function selectLevel(selected) {
 }
 
 function startGame() {
-  //RESET ENEMIES
-  enemies = [];
-  enemiesQty = 100;
-  //RESET ENEMIES POSITION
-  for (let i = 0; i < enemiesQty; i++) {
-    const x = Math.random() * (SCREEN_WIDTH * 2);
-    const y = Math.random() * -SCREEN_HEIGHT;
-    this.enemies.push(new Enemy({ x, y }));
-  };
-  //RESET BOOST
-  boost = [];
-  boostQty = 3;
-  //RESET BOOST POSITION
-  for (let i = 0; i < boostQty; i++) {
-    const x = Math.random() * (SCREEN_WIDTH * 2);
-    const y = Math.random() * -SCREEN_HEIGHT;
-    this.boost.push(new Boost({ x, y }, this.player.lifeCount));
-  };
   if (!panel.classList[0]) { //START GAME
+    //RESET ENEMIES
+    enemies = [];
+    enemiesQty = 100;
+    //RESET ENEMIES POSITION
+    for (let i = 0; i < enemiesQty; i++) {
+      const x = Math.random() * (SCREEN_WIDTH * 2);
+      const y = Math.random() * -SCREEN_HEIGHT;
+      this.enemies.push(new Enemy({ x, y }));
+    };
+    //RESET BOOST
+    boost = [];
+    boostQty = 3;
+    //RESET BOOST POSITION
+    for (let i = 0; i < boostQty; i++) {
+      const x = Math.random() * (SCREEN_WIDTH * 2);
+      const y = Math.random() * -SCREEN_HEIGHT;
+      this.boost.push(new Boost({ x, y }, this.player.lifeCount));
+    };
     //RESET PLAYER
     this.player.lifeCount = 2;
     this.player.position = { x: -10, y: this.canvas.height + 10 };
@@ -229,8 +228,10 @@ function startGame() {
     score = 0;
     PLAYING = true;
   } else { //LOAD PREGAME
-    panel.classList.remove("desactivate");
     PLAYING = false;
+    setTimeout(() => {
+      panel.classList.remove("desactivate");
+    }, 100)
   }
 }
 
@@ -386,11 +387,6 @@ function boostCollision(b) {
     const y = Math.random() * -SCREEN_HEIGHT;
     this.boost.push(new Boost({ x, y }, this.player.lifeCount));
   }
-}
-
-function endGame() {
-  PLAYING = false;
-  alert('¿QUÉ TE CREÍSTE JORÍO QUE ESTO ES JAUJA O QUÉ? PERDISTE MI NIÑO NO TE QUEDAN VIDAS PERDISTEEE')
 }
 
 function pauseGame() {
