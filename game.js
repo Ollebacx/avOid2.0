@@ -17,7 +17,7 @@ var level = 1;
 var unlocked = parseInt(localStorage.getItem("unlocked")) || 1;
 
 var enemies = [];
-var enemiesQty = 100;
+var enemiesQty = 40;
 
 var boost = [];
 var boostQty = 3;
@@ -39,7 +39,6 @@ var darknessTimer;
 var SLOWTIME = false;
 var slowerTimer;
 
-var SMALLER = false;
 var smallerTimer;
 
 var particles = [];
@@ -107,25 +106,17 @@ function animation() {
     //ERASE CANVAS
     context.clearRect(0, 0, CANVAS.width, CANVAS.height);
 
-    //BACKGROUND BOOST
-    for (let b = 0; b < boost.length - 1; b++) {
-      boost[b].create();
-      //CHECK BOOST COLLISION PLAYING
-      if (PLAYING) {
-        boostCollision(b);
-        //CREATE SHIELD
-        if (this.player.invencible && SHIELD) {
-          this.player.shield();
-        }
-        //RAINBOW PROTECTION
-        else if (this.player.invencible && RAINBOW) {
-          this.player.rainbow();
-        }
-      }
-    }
-
     //PLAYER APPEARS WHEN START BTN PRESSED
     if (PLAYING) {
+      this.player.trail();
+      //CREATE SHIELD
+      if (this.player.invencible && SHIELD) {
+        this.player.shield();
+      }
+      //RAINBOW PROTECTION
+      else if (this.player.invencible && RAINBOW) {
+        this.player.rainbow();
+      }
       //PLAYER MOVES
       this.player.create();
       //SCORE COUNTS
@@ -141,6 +132,15 @@ function animation() {
       }
     }
 
+    //BACKGROUND BOOST
+    for (let b = 0; b < boost.length - 1; b++) {
+      boost[b].create();
+      //CHECK BOOST COLLISION PLAYING
+      if (PLAYING) {
+        boostCollision(b);
+      }
+    }
+
     //BACKGROUND ENEMIES
     for (let j = 0; j < this.enemies.length - 1; j++) {
       this.enemies[j].create();
@@ -153,6 +153,7 @@ function animation() {
           this.context.fillText('+' + scoreSum, this.player.position.x - 15, this.player.position.y - 10)
         }
         //PARTICLES EXPLOSION
+        //enemiesExplosion.forEach(enemy => )
         for (let k = 0; k < this.particles.length - 1; k++) {
           this.particles[k].create();
         }
@@ -164,11 +165,11 @@ function animation() {
     }
     //GAME PANEL (LEVEL & SCORE)
     context.fillStyle = "rgba(0,0,0, 0.8)";
-    context.fillRect(0, 0, this.CANVAS.width, 40);
+    context.fillRect(0, 0, this.CANVAS.width, 30);
     context.fillStyle = "rgba(255,255,255, 1)";
-    context.font = "14px Quicksand";
-    context.fillText("Level: " + level, 20, 25);
-    context.fillText("Score: " + score, 90, 25);
+    context.font = "12px Quicksand";
+    context.fillText("Level: " + level, 20, 20);
+    context.fillText("Score: " + score, 90, 20);
   }
   requestAnimationFrame(animation);
 }
@@ -201,6 +202,7 @@ function selectLevel(selected) {
 }
 
 function startGame() {
+  //SAVE MAX SCORE
   if (score > maxScore) {
     maxScore = score;
   }
@@ -277,7 +279,6 @@ function enemyCollision(j) {
         DRAWSCORE = false;
         scoreMultiply = 1;
       }, 1200)
-
     }
 
     //PARTICLES EXPLOSION QUANTITY
@@ -314,7 +315,7 @@ function boostCollision(b) {
       clearInterval(reduceShieldInterval);
       //MAKE PLAYER INVENCIBLE, ACTIVATE SHIELD & BIGGER RADIUS
       this.player.shieldRadius = 15;
-      this.player.shieldColor = '#00B2FF';
+      this.player.shieldColor = 'rgba(0, 178, 255, 0.5)';
       //REDUCE SHIELD SIZE
       blinkShieldTimer = setTimeout(() => {
         reduceShieldInterval = setInterval(function () {
@@ -322,8 +323,8 @@ function boostCollision(b) {
             this.player.shieldRadius -= 0.05;
         }, 10);
         //BLINK SHIELD WHILE DECREASING
-        shieldBlackInterval = setInterval(function () { this.player.shieldColor = '#111'; }, 50);
-        shieldBlueInterval = setInterval(function () { this.player.shieldColor = '#00B2FF' }, 100);
+        shieldBlackInterval = setInterval(function () { this.player.shieldColor = 'rgba(0, 178, 255, 0)'; }, 50);
+        shieldBlueInterval = setInterval(function () { this.player.shieldColor = 'rgba(0, 178, 255, 0.5)' }, 100);
         //CLEAR TIMERS
         setTimeout(() => {
           clearInterval(shieldBlackInterval);

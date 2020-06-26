@@ -7,7 +7,7 @@ function Player() {
   this.shieldRadius = 15;
   this.speed = 0.2;
   this.fillColor = '#FFF';
-  this.shieldColor = '#00B2FF';
+  this.shieldColor = 'rgba(0, 178, 255, 0.5)';
   this.positions = [];
   this.maxPositions = 70;
   this.lifePos = 70;
@@ -16,22 +16,37 @@ function Player() {
   this.invencibleDmg = false;
   this.create = function () {
 
-    if (!SHIELD) { //PARA QUE NO SE DUPLIQUE EN THIS.SHIELD
+    // FOLLOW MOUSE WITH LAG
+    this.shift.x += (mouseX - this.shift.x) * (this.speed);
+    this.shift.y += (mouseY - this.shift.y) * (this.speed);
 
-      // FOLLOW MOUSE WITH LAG
-      this.shift.x += (mouseX - this.shift.x) * (this.speed);
-      this.shift.y += (mouseY - this.shift.y) * (this.speed);
-
-      // APPLY POSITION
-      this.position.x = this.shift.x;
-      this.position.y = this.shift.y;
-    }
+    // APPLY POSITION
+    this.position.x = this.shift.x;
+    this.position.y = this.shift.y;
 
     //PLAYER BODY
     context.beginPath();
     context.fillStyle = this.fillColor;
     context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
     context.fill();
+
+    //HISTORY REGISTER
+    this.positions.push({
+      x: this.position.x,
+      y: this.position.y
+    })
+
+    // PLAYER LIFES
+    for (let j = 1; j <= this.lifeCount; j++) {
+      context.beginPath();
+      context.fillStyle = this.fillColor;
+      if (this.positions[this.lifePos - 14 * j] && this.positions[this.lifePos - 14 * j]) {
+        context.arc(this.positions[this.lifePos - 14 * j].x, this.positions[this.lifePos - 14 * j].y, 3, 0, Math.PI * 2, true);
+        context.fill();
+      }
+    }
+  };
+  this.trail = function () {
 
     //PLAYER TRAIL
     let history = this.positions, prevPot, nextPot;
@@ -54,25 +69,9 @@ function Player() {
     }
     context.stroke();
 
-    //HISTORY REGISTER
-    this.positions.push({
-      x: this.position.x,
-      y: this.position.y
-    })
-
     //CLEAR TRAIL END POSITION
     if (this.positions.length > this.maxPositions) {
       this.positions.splice(0, this.positions.length > this.maxPositions);
-    }
-
-    // PLAYER LIFES
-    for (let j = 1; j <= this.lifeCount; j++) {
-      context.beginPath();
-      context.fillStyle = this.fillColor;
-      if (this.positions[this.lifePos - 14 * j] && this.positions[this.lifePos - 14 * j]) {
-        context.arc(this.positions[this.lifePos - 14 * j].x, this.positions[this.lifePos - 14 * j].y, 3, 0, Math.PI * 2, true);
-        context.fill();
-      }
     }
   };
   this.shield = function () {

@@ -3,7 +3,7 @@ function Particle(position, enemyRad) {
   this.r = (a, b, c) => parseFloat((Math.random() * ((a ? a : 1) - (b ? b : 0)) + (b ? b : 0)).toFixed(c ? c : 0));
   this.position = { x: position.x, y: position.y };
   this.radius = .1;
-  this.speed = Math.random() * 0.05 ;
+  this.speed = Math.random() * 0.05;
   this.rotation = Math.random() * 360;
   this.friction = 0.9997;
   this.xVel = 0;
@@ -25,14 +25,16 @@ function Particle(position, enemyRad) {
     this.position.y += this.yVel;
 
     //STOP DRAWING
-    if (this.radius < 0.05) {
-      // console.log("hi");
-    } else {
-    //PARTICLES BODY
+    if (this.radius > 0.05) {
+      //PARTICLES BODY
       context.beginPath();
       context.fillStyle = this.fillColor;
+      //enemiesExplosion.forEach(particle => particle.position.x, particle.position.y) ===> [{x:23,y:23}, {x:23,y:23}, {x:23,y:23}]
       context.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI, false);
       context.fill();
+    }
+    else {
+      // enemiesExplosion.splice(0,1)
     }
   };
 };
