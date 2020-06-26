@@ -25,13 +25,13 @@ function Boost(bPositions, life) {
 
     // RESET POSITION WHEN CANVAS END
     if (this.position.x < -10) {
-      this.position.x = CANVAS.width + 10 + Math.random() * 30;
+      this.position.x = CANVAS.width*2 + 10 + Math.random() * CANVAS.width;
       if (PLAYING && !SLOWTIME) {
         this.variableSpeed = this.speed + speedIncrement; //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
       }
     }
     if (this.position.y > CANVAS.height + 10) {
-      this.position.y = -10 + Math.random() * -30;
+      this.position.y = -CANVAS.width -10 + Math.random() * -CANVAS.width;
       if (PLAYING && !SLOWTIME) {
         this.variableSpeed = this.speed + speedIncrement; //INCREASE SPEED BY LEVEL WHEN IS OUT OF CANVAS
       }
