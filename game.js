@@ -430,7 +430,11 @@ function pauseGame() {
 }
 function boostExplosion() {
   this.player.distCollision = 100;
-  setTimeout(() => this.player.distCollision = this.player.radius - 2, 100)
+  this.player.invencible = true;
+  setTimeout(() => {
+    this.player.invencible = true;
+    this.player.distCollision = this.player.radius - 2
+  }, 100)
 }
 
 
