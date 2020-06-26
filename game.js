@@ -322,7 +322,6 @@ function boostCollision(b) {
 
     //SHIELD
     if (this.boost[b].fillColor === '#00B2FF') {
-      boostExplosion();
       // IF HAD RAINBOW
       clearTimeout(rainbowTimer);
       this.player.fillColor = '#FFF';
