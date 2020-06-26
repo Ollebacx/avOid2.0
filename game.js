@@ -238,10 +238,11 @@ function startGame() {
     score = 0;
     PLAYING = true;
   } else { //LOAD PREGAME
-    PLAYING = false;
     setTimeout(() => {
+      PLAYING = false;
       panel.classList.remove("desactivate");
-    }, 100)
+      this.particles = []; //AVOID EXPLOSION AT START GAME
+    }, 300)
   }
 }
 
