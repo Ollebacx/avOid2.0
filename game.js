@@ -432,7 +432,7 @@ function boostExplosion() {
   this.player.distCollision = 100;
   this.player.invencible = true;
   setTimeout(() => {
-    this.player.invencible = true;
+    this.player.invencible = false;
     this.player.distCollision = this.player.radius - 2
   }, 100)
 }
