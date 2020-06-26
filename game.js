@@ -49,6 +49,9 @@ var DRAWSCORE = false;
 var drawsScoreTimer;
 
 var score = 0;
+var maxScore = parseInt(localStorage.getItem("maxScore")) || 0;
+localStorage.setItem("maxScore", maxScore);
+document.getElementById("maxScore").innerHTML = maxScore.toString() + ' points';
 var scoreBase = 50;
 var scoreMultiply = 1;
 var scoreSum = 0;
@@ -154,10 +157,10 @@ function animation() {
           this.particles[k].create();
         }
       }
-      //CREATE DARK OVER ENEMIES
-      if (DARK) {
-        this.player.darkness();
-      }
+    }
+    //CREATE DARK OVER ENEMIES
+    if (DARK) {
+      this.player.darkness();
     }
     //GAME PANEL (LEVEL & SCORE)
     context.fillStyle = "rgba(0,0,0, 0.8)";
@@ -198,6 +201,11 @@ function selectLevel(selected) {
 }
 
 function startGame() {
+  if (score > maxScore) {
+    maxScore = score;
+  }
+  localStorage.setItem("maxScore", maxScore)
+  document.getElementById("maxScore").innerHTML = maxScore.toString() + ' points';
   if (!panel.classList[0]) { //START GAME
     //RESET ENEMIES
     enemies = [];
