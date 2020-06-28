@@ -1,4 +1,6 @@
 
+var LOADING = true;
+
 var CANVAS = document.getElementById('canvas');
 var context = this.canvas.getContext('2d')
 
@@ -62,8 +64,21 @@ var scoreSum = 0;
 // } else {
 //   enemiesQty = 100
 // }
-
+function preload() {
+  if (LOADING) {
+    document.getElementById('loading').classList.remove('desactivate')
+    document.getElementById('loader').classList.remove('desactivate')
+    document.getElementById('preload').classList.remove('desactivate')
+  } else {
+    document.getElementById('loading').classList.add('desactivate')
+    document.getElementById('loader').classList.add('desactivate')
+    document.getElementById('preload').classList.add('desactivate')
+  }
+}
 function loadGame() {
+  //LOADING EFFECT
+  preload();
+
   //REGISTER EVENT LISTENER
   document.addEventListener('mousemove', function (event) {
     mouseX = event.clientX - (window.innerWidth - SCREEN_WIDTH) * .5;
@@ -90,6 +105,7 @@ function loadGame() {
     const y = Math.random() * -SCREEN_HEIGHT;
     this.boost.push(new Boost({ x, y }));
   }
+
   //APPLY CLASS SELECTED TO LEVEL SELECTED
   selectLevel();
 
@@ -103,6 +119,12 @@ function animation() {
       SCREEN_WIDTH = window.innerWidth;
       SCREEN_HEIGHT = window.innerHeight;
       map.resize()
+    }
+
+    // CANCEL LOADING EFFECT
+    if (LOADING) {
+      LOADING = false;
+      preload();
     }
 
     //ERASE CANVAS
@@ -304,7 +326,6 @@ function enemyCollision(j) {
     };
     explosions.push(particles)
     BOOM = true;
-    console.log(explosions);
     //DELETE THAT ENEMY
     this.enemies.splice(j, 1)
     //CREATE NEW ENEMY
@@ -419,6 +440,18 @@ function boostCollision(b) {
   }
 }
 
+function boostExplosion() {
+  this.player.distCollision = 100;
+  this.player.invencible = true;
+  setTimeout(() => {
+    if (!RAINBOW || !SHIELD) { // TO FIX
+      console.log('ESTOY');
+      this.player.invencible = false;
+    }
+    this.player.distCollision = this.player.radius - 2
+  }, 100)
+}
+
 function pauseGame() {
   PAUSE = !PAUSE;
   if (PAUSE) {
@@ -426,14 +459,6 @@ function pauseGame() {
     context.fillRect(this.CANVAS.width / 2 - 50, this.CANVAS.height / 2 - 90, 30, 90);
     context.fillRect(this.CANVAS.width / 2 + 10, this.CANVAS.height / 2 - 90, 30, 90);
   }
-}
-function boostExplosion() {
-  this.player.distCollision = 100;
-  this.player.invencible = true;
-  setTimeout(() => {
-    this.player.invencible = false;
-    this.player.distCollision = this.player.radius - 2
-  }, 100)
 }
 
 

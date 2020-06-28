@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +7,13 @@
   <link rel="stylesheet" href="./main.css">
   <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
 </head>
-
 <body onload="loadGame()">
+  <div id="preload" class="loading">
+    <h1 id="loading">
+      Loading
+    </h1>
+    <div id="loader"></div>
+  </div>
   <div id="selectPanel">
     <h1 class="text">avOid</h1>
     <div class="wrapLevel">
@@ -39,7 +43,5 @@
   <script type="text/javascript" src="./js/enemies.js"></script>
   <script type="text/javascript" src="./js/particles.js"></script>
   <script type="text/javascript" src="game.js"></script>
-
 </body>
-
 </html>
