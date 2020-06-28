@@ -5,7 +5,6 @@ function Map() {
     this.resize()
   }
   this.resize = function () {
-    // console.log(SCREEN_WIDTH)
     CANVAS.width = SCREEN_WIDTH;
     CANVAS.height = SCREEN_HEIGHT;
     CANVAS.style.position = 'absolute';

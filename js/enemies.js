@@ -36,7 +36,6 @@ function Enemy(positions) {
     //ENEMIES BODY
     context.beginPath();
     context.fillStyle = this.fillColor;
-    // console.log(this.position.x)
     context.arc(this.position.x, this.position.y, this.variableSize, 0, Math.PI * 2, true);
     context.fill();
   };
