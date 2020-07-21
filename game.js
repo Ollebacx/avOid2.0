@@ -19,7 +19,7 @@ var level = 1;
 var unlocked = parseInt(localStorage.getItem("unlocked")) || 1;
 
 var enemies = [];
-var enemiesQty = 40;
+var enemiesQty = 60;
 
 var boost = [];
 var boostQty = 3;
@@ -60,9 +60,9 @@ var scoreMultiply = 1;
 var scoreSum = 0;
 
 // if (SCREEN_WIDTH < 800) {
-//   enemiesQty = 100
+//   enemiesQty = 60
 // } else {
-//   enemiesQty = 100
+//   enemiesQty = 60
 // }
 function preload() {
   if (LOADING) {
@@ -248,7 +248,7 @@ function startGame() {
   if (!panel.classList[0]) { //START GAME
     //RESET ENEMIES
     enemies = [];
-    enemiesQty = 100;
+    enemiesQty = 60;
     //RESET ENEMIES POSITION
     for (let i = 0; i < enemiesQty; i++) {
       const x = Math.random() * (SCREEN_WIDTH * 2);
@@ -345,6 +345,7 @@ function boostCollision(b) {
     if (this.boost[b].fillColor === '#00B2FF') {
       // IF HAD RAINBOW
       clearTimeout(rainbowTimer);
+      RAINBOW = false;
       this.player.fillColor = '#FFF';
       //RESET ALL TIMERS AT BEGINNING
       clearTimeout(shieldTimer);
@@ -444,12 +445,16 @@ function boostExplosion() {
   this.player.distCollision = 100;
   this.player.invencible = true;
   setTimeout(() => {
-    if (!RAINBOW || !SHIELD) { // TO FIX
-      console.log('ESTOY');
-      this.player.invencible = false;
+    if (RAINBOW) {
+      this.player.distCollision = this.player.radius - 2
     }
-    this.player.distCollision = this.player.radius - 2
-  }, 100)
+    else if (SHIELD) {
+      this.player.distCollision = this.player.shieldRadius - 2;
+    } else {
+      this.player.invencible = false;
+      this.player.distCollision = this.player.radius - 2
+    }
+  }, 50)
 }
 
 function pauseGame() {
@@ -463,32 +468,32 @@ function pauseGame() {
 
 
 //CHETOS
-var color;
-function applyRandomColor() {
-  var letters = '0123456789ABCDEF';
-  color = '#';
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  this.player.fillColor = color;
-}
+// var color;
+// function applyRandomColor() {
+//   var letters = '0123456789ABCDEF';
+//   color = '#';
+//   for (var i = 0; i < 6; i++) {
+//     color += letters[Math.floor(Math.random() * 16)];
+//   }
+//   this.player.fillColor = color;
+// }
 
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'q') {
-    this.player.lifeCount = 3;
-  }
-  if (event.key === 'w') {
-    if (this.player.invencible) {
-      clearInterval(COLOR);
-      this.player.fillColor = '#FFF';
-    } else {
-      COLOR = setInterval(applyRandomColor, 100);
-    }
-    this.player.invencible = !this.player.invencible;
-  }
-  if (event.code === 'Space') {
-    if (PLAYING) {
-      pauseGame();
-    }
-  }
-});
+// document.addEventListener('keydown', (event) => {
+//   if (event.key === 'q') {
+//     this.player.lifeCount = 3;
+//   }
+//   if (event.key === 'w') {
+//     if (this.player.invencible) {
+//       clearInterval(COLOR);
+//       this.player.fillColor = '#FFF';
+//     } else {
+//       COLOR = setInterval(applyRandomColor, 100);
+//     }
+//     this.player.invencible = !this.player.invencible;
+//   }
+//   if (event.code === 'Space') {
+//     if (PLAYING) {
+//       pauseGame();
+//     }
+//   }
+// });
