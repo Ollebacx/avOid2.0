@@ -19,10 +19,10 @@ var level = 1;
 var unlocked = parseInt(localStorage.getItem("unlocked")) || 1;
 
 var enemies = [];
-var enemiesQty = 4;
+var enemiesQty = 60;
 
 var boost = [];
-var boostQty = 30;
+var boostQty = 3;
 
 var SHIELD = false;
 var shieldTimer;
@@ -60,9 +60,9 @@ var scoreMultiply = 1;
 var scoreSum = 0;
 
 // if (SCREEN_WIDTH < 800) {
-//   enemiesQty = 4
+//   enemiesQty = 60
 // } else {
-//   enemiesQty = 4
+//   enemiesQty = 60
 // }
 function preload() {
   if (LOADING) {
@@ -248,7 +248,7 @@ function startGame() {
   if (!panel.classList[0]) { //START GAME
     //RESET ENEMIES
     enemies = [];
-    enemiesQty = 4;
+    enemiesQty = 60;
     //RESET ENEMIES POSITION
     for (let i = 0; i < enemiesQty; i++) {
       const x = Math.random() * (SCREEN_WIDTH * 2);
@@ -257,7 +257,7 @@ function startGame() {
     };
     //RESET BOOST
     boost = [];
-    boostQty = 30;
+    boostQty = 3;
     //RESET BOOST POSITION
     for (let i = 0; i < boostQty; i++) {
       const x = Math.random() * (SCREEN_WIDTH * 2);
