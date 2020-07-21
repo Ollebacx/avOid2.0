@@ -345,6 +345,7 @@ function boostCollision(b) {
     if (this.boost[b].fillColor === '#00B2FF') {
       // IF HAD RAINBOW
       clearTimeout(rainbowTimer);
+      RAINBOW = false;
       this.player.fillColor = '#FFF';
       //RESET ALL TIMERS AT BEGINNING
       clearTimeout(shieldTimer);
@@ -444,12 +445,16 @@ function boostExplosion() {
   this.player.distCollision = 100;
   this.player.invencible = true;
   setTimeout(() => {
-    if (!RAINBOW || !SHIELD) { // TO FIX
-      console.log('ESTOY');
-      this.player.invencible = false;
+    if (RAINBOW) {
+      this.player.distCollision = this.player.radius - 2
     }
-    this.player.distCollision = this.player.radius - 2
-  }, 100)
+    else if (SHIELD) {
+      this.player.distCollision = this.player.shieldRadius - 2;
+    } else {
+      this.player.invencible = false;
+      this.player.distCollision = this.player.radius - 2
+    }
+  }, 50)
 }
 
 function pauseGame() {
